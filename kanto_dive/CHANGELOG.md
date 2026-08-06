@@ -1,0 +1,63 @@
+# Changelog
+
+## 1.4.0
+
+- Replaced the global-origin Tiled link model with paired `DiveZones` and `DiveLandings` objects.
+- Each paired region now has an independently authored underwater landing origin.
+- Added rectangle and 16 px-aligned polygon support.
+- Added editable Route 20 and Route 21 TMX source maps.
+- Fixed world-pipeline/Voxel layering by redrawing the live Surf player above projected dark water.
+- Kept underwater SURF suppression from 1.3.0.
+
+## 1.3.0
+
+- Replaced invisible decorative marker objects with a direct dark-water tint.
+- Darkens every valid surface DIVE cell while preserving the normal water animation.
+- Draws the tint before characters in 2D and Tilt modes.
+- Projects the same linked regions onto the ground in the Voxel pipeline.
+- Removes SURF from party submenus while underwater.
+- Blocks SURF through the field-move eligibility hook during an underwater session.
+- Defers underwater visual indicators to a later release.
+
+## 1.2.1
+
+- Replaced the unused `world.marker_descriptors` hook with real decorative map objects.
+- Surface whirlpools and underwater light columns now render through the normal world entity pipeline.
+- Added six-frame true-colour animations shared by flat, Tilt and Voxel renderers.
+- Made marker objects passable, non-interactive and sorted beneath the player.
+- Filters visual markers against the actual water cells on both linked maps.
+- Removed stale authoring layers and generated Python cache files from the release.
+
+## 1.2.0
+
+- Added permanent renderer-neutral DIVE/SURFACE marker descriptors.
+- Added pixel-art surface whirlpool and underwater bubble assets.
+- Added Voxel world-space ring, halo, light-column and particle descriptors.
+- Simplified Tiled authoring to one `DiveZones` layer.
+- Removed one-way DIVE/SURFACE modes; all links are bidirectional.
+
+## [1.1.0] - 2026-08-06
+
+### Added
+- Emerald-style coordinate links between surface and underwater cells.
+- Independent `both`, `dive` and `surface` cell permissions through rectangles or masks.
+- Full-size Route 20 and Route 21 underwater layers matching their surface-map coordinates.
+- Tiled block atlas, TMX template and converter for authoring new underwater maps.
+- A dedicated map catalog and link-file workflow for expanding Kanto route by route.
+
+### Changed
+- The Surf mount sprite and bobbing animation now remain active underwater.
+- SURFACE now uses the current underwater coordinate, allowing entry at one point and emergence at another.
+- DIVE is available only on explicitly mapped deep-water cells.
+- Underwater traversable tiles use water collision so the engine cannot auto-dismount the player.
+
+## [1.0.0] - 2026-08-05
+
+### Added
+- HM06 DIVE as a teachable Water move and field action.
+- Volcano Badge progression through the Cinnabar Lab Metronome scientist.
+- Route 20 Seafloor, Seafoam Sunken Cave and Route 21 Trench.
+- Original true-colour underwater tileset and complete map collision data.
+- Wild encounter tables for all three underwater maps.
+- Save/load recovery for orphaned underwater sessions.
+- Public exports for other mods to register additional dive zones.

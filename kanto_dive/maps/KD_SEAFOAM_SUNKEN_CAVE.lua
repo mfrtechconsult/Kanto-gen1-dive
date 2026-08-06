@@ -1,0 +1,26 @@
+return {
+  id = "KD_SEAFOAM_SUNKEN_CAVE",
+  label = "KantoDiveSeafoamSunkenCave",
+  index = 1101,
+  tileset = "KD_UNDERWATER",
+  width = 10,
+  height = 8,
+  borderBlock = 2,
+  outdoor = false,
+  region = "KANTO_DIVE",
+  blocks = {
+    6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+    6, 7, 5, 5, 5, 5, 5, 5, 5, 6,
+    6, 5, 5, 8, 5, 10, 5, 14, 5, 6,
+    6, 5, 10, 8, 5, 10, 5, 14, 5, 6,
+    6, 5, 5, 5, 5, 5, 5, 5, 5, 6,
+    6, 14, 5, 10, 5, 8, 8, 5, 14, 6,
+    6, 5, 5, 5, 5, 5, 5, 5, 5, 6,
+    6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  },
+  warps = {
+    { x = 2, y = 2, destMap = "KD_ROUTE20_SEAFLOOR", destWarp = 1 },
+  },
+  objects = {},
+  signs = {},
+}

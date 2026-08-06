@@ -1,0 +1,18 @@
+{
+  "id": "kanto_dive",
+  "name": "Kanto Dive",
+  "version": "1.4.0",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "overhaul",
+  "category": "MECHANIC",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 200,
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Adds HM06 DIVE with Tiled-authored paired surface/underwater regions, dark surface water, Emerald-style bidirectional mappings, and seafloor maps.",
+  "permissions": [
+    "engine_internals"
+  ]
+}

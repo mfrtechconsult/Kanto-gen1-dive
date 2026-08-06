@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="10" height="45" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="7">
+ <properties>
+  <property name="mapId" value="KD_ROUTE21_TRENCH"/>
+  <property name="label" value="KantoDiveRoute21Trench"/>
+  <property name="index" type="int" value="1102"/>
+  <property name="borderBlock" type="int" value="15"/>
+  <property name="surfaceMap" value="ROUTE_21"/>
+ </properties>
+ <tileset firstgid="1" source="kanto_dive_blocks.tsx"/>
+ <layer id="1" name="Blocks" width="10" height="45">
+  <data encoding="csv">
+   1,9,2,14,13,14,9,4,1,9,
+   4,1,9,13,14,9,14,10,4,1,
+   10,4,1,14,9,14,14,1,10,4,
+   1,10,4,9,14,14,14,5,1,10,
+   5,1,10,14,14,14,15,12,5,1,
+   12,5,1,14,14,15,14,2,12,5,
+   2,12,5,14,15,14,13,9,2,12,
+   9,2,12,15,14,13,14,1,9,2,
+   1,9,2,14,13,14,9,4,1,9,
+   4,1,9,13,14,9,14,10,4,1,
+   10,4,1,14,9,14,14,1,10,4,
+   1,10,4,9,14,14,14,5,1,10,
+   5,1,10,14,14,14,15,12,5,1,
+   12,5,1,14,14,15,14,2,12,5,
+   2,12,5,14,15,14,13,9,2,12,
+   9,2,12,15,14,13,14,1,9,2,
+   1,9,2,14,13,14,9,4,1,9,
+   4,1,9,13,14,9,14,10,4,1,
+   10,4,1,14,9,14,14,1,10,4,
+   1,10,4,9,14,14,14,5,1,10,
+   5,1,10,14,14,14,15,12,5,1,
+   12,5,1,14,14,15,14,2,12,5,
+   2,12,5,14,15,14,13,9,2,12,
+   9,2,12,15,14,13,14,1,9,2,
+   1,9,2,14,13,14,9,4,1,9,
+   4,1,9,13,14,9,14,10,4,1,
+   10,4,1,14,9,14,14,1,10,4,
+   1,10,4,9,14,14,14,5,1,10,
+   5,1,10,14,14,14,15,12,5,1,
+   12,5,1,14,14,15,14,2,12,5,
+   2,12,5,14,15,14,13,9,2,12,
+   9,2,12,15,14,13,14,1,9,2,
+   1,9,2,14,13,14,9,4,1,9,
+   4,1,9,13,14,9,14,10,4,1,
+   10,4,1,14,9,14,14,1,10,4,
+   1,10,4,9,14,14,14,5,1,10,
+   5,1,10,14,14,14,15,12,5,1,
+   12,5,1,14,14,15,14,2,12,5,
+   2,12,5,14,15,14,13,9,2,12,
+   9,2,12,15,14,13,14,1,9,2,
+   1,9,2,14,13,14,9,4,1,9,
+   4,1,9,13,14,9,14,10,4,1,
+   10,4,1,14,9,14,14,1,10,4,
+   1,10,4,9,14,14,14,5,1,10,
+   5,1,10,14,14,14,15,12,5,1
+  </data>
+ </layer>
+ <objectgroup id="2" name="DiveZones" color="#3d8bfd">
+  <object id="1" name="route21_north_shelf" x="64" y="128" width="192" height="288">
+   <properties>
+    <property name="linkId" value="route21_north_shelf"/>
+   </properties>
+  </object>
+  <object id="3" name="route21_central_trench" x="48" y="544" width="224" height="352">
+   <properties>
+    <property name="linkId" value="route21_central_trench"/>
+   </properties>
+  </object>
+  <object id="5" name="route21_south_shelf" x="64" y="1056" width="192" height="288">
+   <properties>
+    <property name="linkId" value="route21_south_shelf"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="3" name="DiveLandings" color="#20c997">
+  <object id="2" name="route21_north_shelf" x="64" y="128" width="192" height="288">
+   <properties>
+    <property name="linkId" value="route21_north_shelf"/>
+   </properties>
+  </object>
+  <object id="4" name="route21_central_trench" x="48" y="544" width="224" height="352">
+   <properties>
+    <property name="linkId" value="route21_central_trench"/>
+   </properties>
+  </object>
+  <object id="6" name="route21_south_shelf" x="64" y="1056" width="192" height="288">
+   <properties>
+    <property name="linkId" value="route21_south_shelf"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="Warps">
+
+ </objectgroup>
+</map>

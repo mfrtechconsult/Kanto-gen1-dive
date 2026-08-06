@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="9" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="8">
+ <properties>
+  <property name="mapId" value="KD_ROUTE20_SEAFLOOR"/>
+  <property name="label" value="KantoDiveRoute20Seafloor"/>
+  <property name="index" type="int" value="1100"/>
+  <property name="borderBlock" type="int" value="15"/>
+  <property name="surfaceMap" value="ROUTE_20"/>
+ </properties>
+ <tileset firstgid="1" source="kanto_dive_blocks.tsx"/>
+ <layer id="1" name="Blocks" width="50" height="9">
+  <data encoding="csv">
+   1,10,1,13,4,15,9,1,12,2,14,5,1,10,1,13,4,15,9,1,12,2,14,5,1,10,1,13,4,15,9,1,12,2,14,5,1,10,1,13,4,15,9,1,12,2,14,5,1,10,
+   15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,2,15,10,
+   14,10,1,2,4,5,9,12,1,1,2,4,5,9,12,1,1,2,4,1,14,10,1,1,2,4,5,9,12,10,4,2,4,5,9,12,1,1,2,4,5,9,12,1,1,2,4,5,14,10,
+   13,10,5,9,12,1,1,2,4,5,9,12,1,1,2,4,5,9,12,10,5,2,4,5,9,12,1,1,2,15,13,9,12,1,1,2,4,5,9,12,1,1,2,4,5,9,12,1,13,10,
+   12,10,1,1,2,4,5,9,12,1,1,2,4,5,9,12,1,1,2,1,1,15,12,1,1,2,4,5,9,2,1,1,2,4,5,9,12,1,1,2,4,5,9,12,1,1,2,4,12,10,
+   10,10,4,5,9,12,1,1,2,4,5,9,12,1,1,2,4,5,9,10,10,10,2,4,5,8,12,1,1,10,10,5,9,12,1,1,2,4,5,9,12,1,1,2,4,5,9,12,10,10,
+   9,10,12,1,1,2,4,5,9,12,1,1,2,4,5,9,12,1,1,1,1,2,9,12,1,1,2,4,5,15,1,1,1,2,4,5,9,12,1,1,2,4,5,9,12,1,1,2,9,10,
+   5,10,13,15,1,2,5,10,13,15,1,2,5,10,13,15,1,2,5,10,13,15,1,2,5,10,13,15,1,2,5,10,13,15,1,2,5,10,13,15,1,2,5,10,13,15,1,2,5,10,
+   4,10,14,1,4,10,14,1,4,10,14,1,4,10,14,1,4,10,14,1,4,10,14,1,4,10,14,1,4,10,14,1,4,10,14,1,4,10,14,1,4,10,14,1,4,10,14,1,4,10
+  </data>
+ </layer>
+ <objectgroup id="2" name="DiveZones" color="#3d8bfd">
+  <object id="1" name="route20_west_basin" x="64" y="64" width="544" height="160">
+   <properties>
+    <property name="linkId" value="route20_west_basin"/>
+   </properties>
+  </object>
+  <object id="3" name="route20_seafoam_channel" x="704" y="192" width="192" height="64">
+   <properties>
+    <property name="linkId" value="route20_seafoam_channel"/>
+   </properties>
+  </object>
+  <object id="5" name="route20_east_basin" x="992" y="64" width="544" height="160">
+   <properties>
+    <property name="linkId" value="route20_east_basin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="3" name="DiveLandings" color="#20c997">
+  <object id="2" name="route20_west_basin" x="64" y="64" width="544" height="160">
+   <properties>
+    <property name="linkId" value="route20_west_basin"/>
+   </properties>
+  </object>
+  <object id="4" name="route20_seafoam_channel" x="704" y="192" width="192" height="64">
+   <properties>
+    <property name="linkId" value="route20_seafoam_channel"/>
+   </properties>
+  </object>
+  <object id="6" name="route20_east_basin" x="992" y="64" width="544" height="160">
+   <properties>
+    <property name="linkId" value="route20_east_basin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="Warps">
+  <object id="7" x="800" y="160">
+   <properties>
+    <property name="destMap" value="KD_SEAFOAM_SUNKEN_CAVE"/>
+    <property name="destWarp" type="int" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+</map>

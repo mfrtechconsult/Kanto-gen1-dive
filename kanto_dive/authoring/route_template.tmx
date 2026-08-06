@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="3">
+ <properties>
+  <property name="mapId" value="KD_MY_SEAFLOOR"/>
+  <property name="label" value="KantoDiveMySeafloor"/>
+  <property name="index" type="int" value="1200"/>
+  <property name="borderBlock" type="int" value="15"/>
+  <property name="surfaceMap" value="ROUTE_19"/>
+ </properties>
+ <tileset firstgid="1" source="kanto_dive_blocks.tsx"/>
+ <layer id="1" name="Blocks" width="20" height="12">
+  <data encoding="csv">
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+  </data>
+ </layer>
+ <objectgroup id="2" name="DiveZones" color="#3d8bfd">
+  <object id="1" name="example_basin" x="64" y="64" width="128" height="64">
+   <properties>
+    <property name="linkId" value="example_basin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="3" name="DiveLandings" color="#20c997">
+  <object id="2" name="example_basin" x="128" y="96" width="128" height="64">
+   <properties>
+    <property name="linkId" value="example_basin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="Warps">
+
+ </objectgroup>
+</map>

@@ -1,0 +1,29 @@
+return {
+  summary = "Adds HM06 DIVE and coordinate-linked underwater layers below Kanto.",
+  author = "Mra YT",
+  tags = { "mechanic", "content", "exploration", "maps" },
+  differences = {
+    changed = {
+      "Selected Kanto Water species can learn DIVE.",
+      "The Cinnabar Lab Metronome scientist has a post-Blaine HM06 branch.",
+      "The Surf mount and bobbing animation remain active underwater.",
+      "SURF cannot be selected again while underwater.",
+    },
+    added = {
+      "HM06 DIVE and its field action.",
+      "Tiled-authored paired Route 20 and Route 21 underwater layers.",
+      "Seafoam Sunken Cave.",
+      "Per-cell DIVE and SURFACE permissions.",
+      "Darkened surface water on DIVE cells in 2D, Tilt and Voxel modes.",
+      "Paired DiveZones/DiveLandings authoring in Tiled and a reusable inter-mod zone API.",
+    },
+    known = {
+      "DIVE is a one-turn Water attack in battle.",
+      "Only Route 20 and Route 21 are mapped in this release; the authoring tools support adding the remaining sea routes.",
+    },
+  },
+  credits = {
+    { who = "Mra YT", for_ = "project direction and release" },
+  },
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}
