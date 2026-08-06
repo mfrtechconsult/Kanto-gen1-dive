@@ -1,7 +1,7 @@
 {
   "id": "kanto_dive",
   "name": "Kanto Dive",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "api": 2,
   "entry": "main.lua",
   "profile": "overhaul",
@@ -11,7 +11,7 @@
   "dependencies": [],
   "optional_dependencies": [],
   "conflicts": [],
-  "description": "Adds HM06 DIVE with Tiled-authored paired surface/underwater regions, 2D dark-water markers, Emerald-style bidirectional mappings, and seafloor maps.",
+  "description": "Adds HM06 DIVE with Tiled-authored paired surface/underwater regions, 2D and Voxel dark-water markers, Emerald-style bidirectional mappings, and seafloor maps.",
   "permissions": [
     "engine_internals"
   ]

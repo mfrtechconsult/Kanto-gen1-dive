@@ -3,7 +3,7 @@ SurfaceDarkService.__index = SurfaceDarkService
 
 -- A neutral black tint keeps the animated water visible while shifting every
 -- colour mode toward its own darkest shade. It therefore works in monochrome,
--- SGB palettes, RED++ true colour and Tilt without shipping ROM art.
+-- SGB palettes, RED++ true colour, Tilt and Voxel without shipping ROM art.
 local SHADE_ALPHA = 0.34
 local CELL_SIZE = 16
 
@@ -149,21 +149,81 @@ function SurfaceDarkService:drawFlat(mapId, camX, camY, viewWidth, viewHeight)
   love.graphics.pop()
 end
 
--- World-pipeline renderers such as Voxel own their terrain, depth buffer and
--- character pass. Drawing a projected translucent polygon through drawFx
--- happens after that scene and creates a screen-space shadow instead of a
--- real material change. Kanto Dive therefore leaves world-pipeline terrain
--- untouched until Gen1Recomp exposes a cell-material hook. DIVE itself and
--- coordinate links remain fully functional in those modes.
+local function projectPoint(project, x, y)
+  local px, py = project(x, y)
+  if type(px) ~= "number" or type(py) ~= "number" then return nil end
+  return px, py
+end
 
-local function disableLegacyPipelineProjection()
-  local loaded, Pipelines = pcall(require, "src.render.Pipelines")
-  if loaded and Pipelines then
-    -- Version 1.4.0 wrapped Pipelines.drawWorld and read the active service
-    -- through this field. Clearing it makes that wrapper inert after an F5
-    -- hot reload; a normal restart loads no wrapper at all.
-    Pipelines.__kantoDiveSurfaceDarkService = nil
+-- Official world pipelines, including Voxel, call ctx.drawFx with their own
+-- world-to-canvas projection. Four projected cell corners form a real ground
+-- quadrilateral, so the dark patch follows camera rotation and perspective
+-- instead of becoming a HUD square.
+function SurfaceDarkService:drawProjected(ctx, project)
+  if not (ctx and ctx.state and ctx.state.map and type(project) == "function") then
+    return
   end
+  local runs = self.runsByMap[ctx.state.map.id]
+  if not (runs and graphicsAvailable() and type(love.graphics.polygon) == "function") then
+    return
+  end
+
+  love.graphics.push("all")
+  love.graphics.setColor(0, 0, 0, SHADE_ALPHA)
+  for _, run in ipairs(runs) do
+    local x0, y0 = run.x * CELL_SIZE, run.y * CELL_SIZE
+    local x1, y1 = x0 + run.width * CELL_SIZE, y0 + CELL_SIZE
+    local ax, ay = projectPoint(project, x0, y0)
+    local bx, by = projectPoint(project, x1, y0)
+    local cx, cy = projectPoint(project, x1, y1)
+    local dx, dy = projectPoint(project, x0, y1)
+    if ax and bx and cx and dx then
+      love.graphics.polygon("fill", ax, ay, bx, by, cx, cy, dx, dy)
+    end
+  end
+  love.graphics.pop()
+end
+
+function SurfaceDarkService:playerTouchesDark(mapId, player)
+  if not (mapId and player) then return false end
+  local rows = self.lookup[mapId]
+  if not rows then return false end
+  if rows[key(player.cellX, player.cellY)] then return true end
+  if player.targetX ~= nil and player.targetY ~= nil
+      and rows[key(player.targetX, player.targetY)] then return true end
+  return false
+end
+
+-- World pipelines composite ctx.drawFx after their terrain and character pass.
+-- The dark-water polygon therefore has no depth buffer to keep it below the
+-- hero. Redraw the exact live player sprite at the pipeline-projected foot
+-- position whenever the player overlaps a dark-water cell. This is not a HUD
+-- copy: it is anchored through the pipeline's own world projection and uses
+-- the same Player:draw pose, Surf sheet, palette and animation as the engine.
+function SurfaceDarkService:redrawPlayerProjected(ctx, project, scale)
+  if not (ctx and ctx.state and ctx.state.map and type(project) == "function") then
+    return
+  end
+  local state = ctx.state
+  local player = state.player
+  local mapId = state.map.id
+  if not self:playerTouchesDark(mapId, player) then return end
+  if not (player and type(player.draw) == "function") then return end
+
+  local wx, wy = player.px + 8, player.py + 16
+  local sx, sy = projectPoint(project, wx, wy)
+  if not sx then return end
+  scale = tonumber(scale) or tonumber(ctx.scale) or 1
+  if scale == 0 then scale = 1 end
+  local cam = ctx.cam or state.camera or { x = 0, y = 0 }
+  local flatFootX, flatFootY = wx - (cam.x or 0), wy - (cam.y or 0)
+
+  love.graphics.push("all")
+  love.graphics.setColor(1, 1, 1, 1)
+  love.graphics.scale(scale, scale)
+  love.graphics.translate(sx / scale - flatFootX, sy / scale - flatFootY)
+  player:draw(cam.x or 0, cam.y or 0)
+  love.graphics.pop()
 end
 
 local function installTileRenderer(service)
@@ -192,9 +252,43 @@ local function installTileRenderer(service)
   return true
 end
 
+local function installPipelineProjection(service)
+  local loaded, Pipelines = pcall(require, "src.render.Pipelines")
+  if not (loaded and Pipelines) then
+    return nil, "src.render.Pipelines is unavailable"
+  end
+
+  Pipelines.__kantoDiveSurfaceDarkService = service
+  if Pipelines.__kantoDiveSurfaceDarkPatched then return true end
+
+  local originalDrawWorld = Pipelines.drawWorld
+  if type(originalDrawWorld) ~= "function" then
+    return nil, "Pipelines.drawWorld is unavailable"
+  end
+
+  Pipelines.drawWorld = function(id, ctx)
+    local active = Pipelines.__kantoDiveSurfaceDarkService
+    if active and ctx and type(ctx.drawFx) == "function"
+        and ctx.state and ctx.state.map
+        and active.byMap[ctx.state.map.id] then
+      local baseDrawFx = ctx.drawFx
+      ctx.drawFx = function(project, scale)
+        -- World pipelines invoke drawFx after rendering their scene. Draw the
+        -- ground tint, then restore the live player sprite above it before the
+        -- engine's normal field effects are composited.
+        active:drawProjected(ctx, project)
+        active:redrawPlayerProjected(ctx, project, scale)
+        return baseDrawFx(project, scale)
+      end
+    end
+    return originalDrawWorld(id, ctx)
+  end
+  Pipelines.__kantoDiveSurfaceDarkPatched = true
+  return true
+end
+
 function SurfaceDarkService:install()
   self:build()
-  disableLegacyPipelineProjection()
 
   local ok, err = installTileRenderer(self)
   if not ok then
@@ -202,9 +296,15 @@ function SurfaceDarkService:install()
     return nil
   end
 
+  ok, err = installPipelineProjection(self)
+  if not ok then
+    self.mod.log:error("Could not install surface DIVE tint in world pipelines: %s", tostring(err))
+    return nil
+  end
+
   local total = 0
   for _, cells in pairs(self.byMap) do total = total + #cells end
-  self.mod.log:info("Installed 2D/Tilt dark-water tint on %d surface DIVE cells", total)
+  self.mod.log:info("Installed dark-water tint on %d surface DIVE cells", total)
   return true
 end
 
