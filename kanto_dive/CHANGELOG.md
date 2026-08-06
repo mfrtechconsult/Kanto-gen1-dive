@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.1
+
+- Restored always-visible dark DIVE zones in Voxel mode following playtest feedback.
+- Restored projection of the exact linked surface regions through the active world-pipeline camera.
+- Restored the live Surf player redraw above projected dark water so the hero remains readable.
+- Kept the Route 19 compact two-entrance reef passage introduced in 1.5.0.
+
 ## 1.5.0
 
 - Removed the post-composite world-pipeline tint that appeared as a large shadow in Voxel mode.
