@@ -12,7 +12,7 @@ on:
     types:
       - opened
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: write
