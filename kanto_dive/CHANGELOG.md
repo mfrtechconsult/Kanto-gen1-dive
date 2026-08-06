@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.0
+
+- Removed the post-composite world-pipeline tint that appeared as a large shadow in Voxel mode.
+- Kept dark DIVE water in 2D and Tilt, where it is rendered below characters.
+- Added Route 19 Reef Passage with two separated 4 x 4 surface DIVE squares.
+- Added a compact underwater map with two square chambers connected by a two-cell-high corridor.
+- Added an editable `route19_reef_passage.tmx` example and updated authoring documentation.
+
 ## 1.4.0
 
 - Replaced the global-origin Tiled link model with paired `DiveZones` and `DiveLandings` objects.

@@ -2,12 +2,12 @@
 
 Dark water is generated from the exact `DiveZones` cells exported by Tiled. It does not change map collision, encounters, warps or the original map data.
 
-## 2D
+## 2D and Tilt
 
-The tint is drawn in the tile renderer immediately after the animated water layer and before characters. The hero therefore remains naturally above it.
+The tint is drawn in the tile renderer immediately after the animated water layer and before characters. The hero therefore remains naturally above it. Tilt transforms that already-composited terrain normally.
 
 ## World pipelines / Voxel
 
-Gen1Recomp world pipelines expose their projection only during the field-effect composite, after their terrain and character scene has already been rendered. Kanto Dive projects the dark-water polygons through that camera, then redraws the exact live player sprite at the same projected world foot position whenever the player overlaps a dark cell. This prevents the tint from covering the Surf sprite while keeping the patch attached to the 3D ground.
+Kanto Dive does not draw a post-composite tint in world-pipeline renderers. Their `drawFx` projection runs after terrain and characters, so a translucent polygon becomes a broad screen-space shadow and cannot participate in the pipeline depth buffer.
 
-The redraw uses `Player:draw`, so facing, Surf animation, palettes and sprite replacements stay synchronized with the engine. It is limited to the player and only runs while touching a dark-water cell.
+DIVE and SURFACE remain fully functional in Voxel mode. The water stays at its normal material until Gen1Recomp exposes a supported per-cell terrain-material or pre-character geometry hook.

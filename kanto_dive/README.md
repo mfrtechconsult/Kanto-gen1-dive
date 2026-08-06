@@ -5,6 +5,7 @@ layers to Gen1Recomp. The mod is written and distributed entirely in English.
 
 ## Included content
 
+- Route 19 Reef Passage: two 4 x 4 surface squares linked by a compact underwater corridor
 - Route 20 Seafloor, sized to the complete Route 20 coordinate grid
 - Seafoam Sunken Cave
 - Route 21 Trench, sized to the complete Route 21 coordinate grid
@@ -13,7 +14,7 @@ layers to Gen1Recomp. The mod is written and distributed entirely in English.
 - Original underwater tileset and wild encounters
 - Tiled authoring tools for expanding the system route by route
 - Permanently darkened surface water on every usable DIVE cell
-- Surface tint integrated into 2D, Tilt and Voxel rendering
+- Surface tint integrated into 2D and Tilt rendering; world-pipeline/Voxel modes keep normal water to avoid post-composite shadow artifacts
 
 No ROM-derived graphics or audio are included.
 
@@ -37,14 +38,14 @@ Enable **Kanto Dive** in the F10 mod manager, then restart the game when asked.
 ## Using DIVE and SURFACE
 
 Teach HM06 to a compatible Pokemon and Surf onto a mapped deep-water cell on
-Route 20 or Route 21. DIVE appears in that Pokemon's party submenu only when
+Route 19, Route 20 or Route 21. DIVE appears in that Pokemon's party submenu only when
 that exact cell has an underwater link.
 
 Every usable surface cell is covered by a darker water tint. The normal water
 animation remains visible beneath it. The tint is generated from the same
 coordinate-link data as DIVE, so an unlinked cell is never darkened.
 
-The underwater layer uses the same movement coordinates as the surface map.
+Each authored region maps local coordinates to its paired underwater landing.
 Moving underwater changes the emergence point: SURFACE maps the current
 underwater cell back to its paired surface cell, like Pokemon Emerald.
 
@@ -107,6 +108,21 @@ valid session origin, the emergency SURFACE action returns the player to the
 last healing point. Surface before disabling or removing the mod.
 
 
-## 1.4.0 authoring model
+## Paired-region authoring model
 
-DIVE zones are now paired explicitly in Tiled. `DiveZones` marks surface cells and `DiveLandings` marks their underwater counterparts. Objects sharing the same `linkId` are translated cell-for-cell in both directions. See `MAPPING_GUIDE.md` and the editable Route 20/21 TMX examples.
+Since 1.4.0, DIVE zones are paired explicitly in Tiled. `DiveZones` marks surface cells and `DiveLandings` marks their underwater counterparts. Objects sharing the same `linkId` are translated cell-for-cell in both directions. See `MAPPING_GUIDE.md` and the editable Route 20/21 TMX examples.
+
+## Route 19 compact reef passage
+
+Route 19 now contains two separate 4 x 4 DIVE squares at surface cells
+`(4,30)` and `(12,30)`. They land in two square underwater chambers joined
+by a two-cell-high corridor. Entering through one square and crossing the
+corridor allows the player to surface from the other square.
+
+## Voxel rendering note
+
+Gen1Recomp world pipelines currently expose field-effect projection only after
+their terrain and character pass. A translucent projected polygon therefore
+behaves like a large screen-space shadow. Kanto Dive 1.5.0 no longer draws the
+dark-water tint in those pipelines. DIVE, SURFACE and all coordinate links
+remain functional; 2D and Tilt retain the dark-water marker.

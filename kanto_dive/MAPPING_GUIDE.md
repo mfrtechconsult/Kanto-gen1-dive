@@ -1,6 +1,6 @@
 # Kanto Dive map authoring — paired Tiled regions
 
-Kanto Dive 1.4.0 uses explicit paired regions, closer to Pokémon Emerald. You decide in Tiled both **where DIVE is allowed on the surface** and **where the matching cells exist underwater**.
+Kanto Dive 1.5.0 uses explicit paired regions, closer to Pokémon Emerald. You decide in Tiled both **where DIVE is allowed on the surface** and **where the matching cells exist underwater**.
 
 ## The three layers
 
@@ -65,6 +65,7 @@ The link output contains one independent link per paired Tiled object.
 
 ## Included editable examples
 
+- `authoring/route19_reef_passage.tmx` — two separated surface squares connected by one underwater corridor
 - `authoring/route20_seafloor.tmx`
 - `authoring/route21_trench.tmx`
 - `authoring/route_template.tmx`
@@ -73,7 +74,7 @@ Open the examples and toggle the blue and green layers. Dragging a green region 
 
 ## Registering generated files
 
-Add the map to `data/maps.lua`, then add its link file and underwater maps to `data/zones.lua`. The existing Route 20 and Route 21 entries are working examples.
+Add the map to `data/maps.lua`, then add its link file and underwater maps to `data/zones.lua`. The Route 19, Route 20 and Route 21 entries are working examples.
 
 ## Runtime rules
 
@@ -82,3 +83,11 @@ Add the map to `data/maps.lua`, then add its link file and underwater maps to `d
 - Every link is bidirectional.
 - SURF is removed and rejected underwater because the player is already using the Surf movement state and sprite.
 - The underwater map song plays while the Surf sprite and collision state remain active.
+
+## Compact two-entrance passage example
+
+`route19_reef_passage.tmx` demonstrates two independent surface regions that
+land in the same underwater map. The left and right `DiveLandings` rectangles
+cover square chambers, while the `Blocks` layer joins those chambers with a
+narrow corridor. Corridor cells are traversable but have no paired
+`DiveZones`, so SURFACE is available only inside the two square chambers.
