@@ -1,0 +1,90 @@
+name: Build and publish Kanto Dive release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "kanto_dive/**"
+      - ".github/workflows/release.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kanto-dive-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Read mod version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(python3 -c 'import json; print(json.load(open("kanto_dive/manifest.json", encoding="utf-8"))["version"])')
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Build installable ZIP
+        shell: bash
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          ZIP="kanto_dive-${VERSION}.zip"
+          zip -r "$ZIP" kanto_dive \
+            -x "*/__pycache__/*" "*.pyc" "*.pyo" ".DS_Store" "Thumbs.db"
+          sha256sum "$ZIP" > "${ZIP}.sha256"
+
+      - name: Prepare release notes
+        shell: bash
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          cat > release-notes.md <<EOF
+          ## Kanto Dive ${VERSION}
+
+          Kanto Dive adds HM06 DIVE and Emerald-style underwater exploration to Gen1Recomp.
+
+          ### Highlights
+
+          - DIVE zones authored explicitly in Tiled
+          - Dark DIVE water visible in 2D, Tilt, and Voxel modes
+          - Bidirectional surface/underwater coordinate mapping
+          - Surf movement and sprite preserved underwater
+          - SURF blocked while already underwater
+          - Route 19 Reef Passage with two entrances and an underwater corridor
+          - Route 20 Seafloor, Seafoam Sunken Cave, and Route 21 Trench
+
+          ### Installation
+
+          Download `kanto_dive-${VERSION}.zip`, extract it, and copy the included `kanto_dive` folder into `Gen1Recomp/mods/`.
+
+          The final path must be `Gen1Recomp/mods/kanto_dive/manifest.json`.
+          EOF
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          ZIP="kanto_dive-${VERSION}.zip"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ZIP" "${ZIP}.sha256" --clobber
+            gh release edit "$TAG" \
+              --title "Kanto Dive ${VERSION}" \
+              --notes-file release-notes.md \
+              --latest
+          else
+            gh release create "$TAG" "$ZIP" "${ZIP}.sha256" \
+              --target "$GITHUB_SHA" \
+              --title "Kanto Dive ${VERSION}" \
+              --notes-file release-notes.md \
+              --latest
+          fi
