@@ -8,6 +8,6 @@ The tint is drawn in the tile renderer immediately after the animated water laye
 
 ## World pipelines / Voxel
 
-Kanto Dive does not draw a post-composite tint in world-pipeline renderers. Their `drawFx` projection runs after terrain and characters, so a translucent polygon becomes a broad screen-space shadow and cannot participate in the pipeline depth buffer.
+The linked cell runs are projected through the active world pipeline's `ctx.drawFx` camera. Each run becomes a quadrilateral following camera angle and perspective, so the same Tiled-authored DIVE zones remain visible in Voxel mode.
 
-DIVE and SURFACE remain fully functional in Voxel mode. The water stays at its normal material until Gen1Recomp exposes a supported per-cell terrain-material or pre-character geometry hook.
+World pipelines composite field effects after their terrain and character pass. To prevent the dark projection from covering the hero, Kanto Dive redraws the exact live player sprite at the same projected foot position whenever the player overlaps a dark cell. Facing, Surf animation, palette and sprite replacements remain synchronized because the normal `Player:draw` path is reused.
