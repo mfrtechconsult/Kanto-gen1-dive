@@ -1,5 +1,23 @@
 return {
   {
+    file = "maps/KD_ROUTE19_REEF_PASSAGE.lua",
+    song = "Music_Dungeon2",
+    encounters = {
+      grass = { rate = 18, slots = {
+        { level = 22, species = "TENTACOOL" },
+        { level = 22, species = "HORSEA" },
+        { level = 23, species = "SHELLDER" },
+        { level = 23, species = "KRABBY" },
+        { level = 24, species = "STARYU" },
+        { level = 24, species = "TENTACOOL" },
+        { level = 25, species = "HORSEA" },
+        { level = 25, species = "SHELLDER" },
+        { level = 26, species = "SEADRA" },
+        { level = 27, species = "TENTACRUEL" },
+      } },
+    },
+  },
+  {
     file = "maps/KD_ROUTE20_SEAFLOOR.lua",
     song = "Music_Dungeon2",
     encounters = {

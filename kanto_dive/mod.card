@@ -11,15 +11,15 @@ return {
     },
     added = {
       "HM06 DIVE and its field action.",
-      "Tiled-authored paired Route 20 and Route 21 underwater layers.",
+      "Tiled-authored paired Route 19, Route 20 and Route 21 underwater layers.",
       "Seafoam Sunken Cave.",
       "Per-cell DIVE and SURFACE permissions.",
-      "Darkened surface water on DIVE cells in 2D, Tilt and Voxel modes.",
+      "Darkened surface water on DIVE cells in 2D and Tilt modes without Voxel overlay artifacts.",
       "Paired DiveZones/DiveLandings authoring in Tiled and a reusable inter-mod zone API.",
     },
     known = {
       "DIVE is a one-turn Water attack in battle.",
-      "Only Route 20 and Route 21 are mapped in this release; the authoring tools support adding the remaining sea routes.",
+      "Route 19, Route 20 and Route 21 are mapped in this release; the authoring tools support adding the remaining sea routes.",
     },
   },
   credits = {

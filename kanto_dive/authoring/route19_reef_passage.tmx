@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="10" height="4" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="5">
+ <properties>
+  <property name="mapId" value="KD_ROUTE19_REEF_PASSAGE"/>
+  <property name="label" value="KantoDiveRoute19ReefPassage"/>
+  <property name="index" type="int" value="1103"/>
+  <property name="borderBlock" type="int" value="15"/>
+  <property name="surfaceMap" value="ROUTE_19"/>
+ </properties>
+ <tileset firstgid="1" source="kanto_dive_blocks.tsx"/>
+ <layer id="1" name="Blocks" width="10" height="4">
+  <data encoding="csv">
+   16,16,16,16,16,16,16,16,16,16,
+   16,1,1,16,16,16,16,1,1,16,
+   16,1,1,2,2,2,2,1,1,16,
+   16,16,16,16,16,16,16,16,16,16
+  </data>
+ </layer>
+ <objectgroup id="2" name="DiveZones" color="#3d8bfd">
+  <object id="1" name="route19_reef_west" x="64" y="480" width="64" height="64">
+   <properties><property name="linkId" value="route19_reef_west"/></properties>
+  </object>
+  <object id="2" name="route19_reef_east" x="192" y="480" width="64" height="64">
+   <properties><property name="linkId" value="route19_reef_east"/></properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="3" name="DiveLandings" color="#20c997">
+  <object id="3" name="route19_reef_west" x="32" y="32" width="64" height="64">
+   <properties><property name="linkId" value="route19_reef_west"/></properties>
+  </object>
+  <object id="4" name="route19_reef_east" x="224" y="32" width="64" height="64">
+   <properties><property name="linkId" value="route19_reef_east"/></properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="Warps"/>
+</map>
