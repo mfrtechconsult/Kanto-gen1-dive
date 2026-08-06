@@ -14,7 +14,7 @@ layers to Gen1Recomp. The mod is written and distributed entirely in English.
 - Original underwater tileset and wild encounters
 - Tiled authoring tools for expanding the system route by route
 - Permanently darkened surface water on every usable DIVE cell
-- Surface tint integrated into 2D and Tilt rendering; world-pipeline/Voxel modes keep normal water to avoid post-composite shadow artifacts
+- Surface tint visible in 2D, Tilt and Voxel rendering
 
 No ROM-derived graphics or audio are included.
 
@@ -107,22 +107,21 @@ If an old or manually modified save is loaded on a surfacing map without a
 valid session origin, the emergency SURFACE action returns the player to the
 last healing point. Surface before disabling or removing the mod.
 
-
 ## Paired-region authoring model
 
-Since 1.4.0, DIVE zones are paired explicitly in Tiled. `DiveZones` marks surface cells and `DiveLandings` marks their underwater counterparts. Objects sharing the same `linkId` are translated cell-for-cell in both directions. See `MAPPING_GUIDE.md` and the editable Route 20/21 TMX examples.
+Since 1.4.0, DIVE zones are paired explicitly in Tiled. `DiveZones` marks surface cells and `DiveLandings` marks their underwater counterparts. Objects sharing the same `linkId` are translated cell-for-cell in both directions. See `MAPPING_GUIDE.md` and the editable Route 19/20/21 TMX examples.
 
 ## Route 19 compact reef passage
 
-Route 19 now contains two separate 4 x 4 DIVE squares at surface cells
+Route 19 contains two separate 4 x 4 DIVE squares at surface cells
 `(4,30)` and `(12,30)`. They land in two square underwater chambers joined
 by a two-cell-high corridor. Entering through one square and crossing the
 corridor allows the player to surface from the other square.
 
 ## Voxel rendering note
 
-Gen1Recomp world pipelines currently expose field-effect projection only after
-their terrain and character pass. A translucent projected polygon therefore
-behaves like a large screen-space shadow. Kanto Dive 1.5.0 no longer draws the
-dark-water tint in those pipelines. DIVE, SURFACE and all coordinate links
-remain functional; 2D and Tilt retain the dark-water marker.
+In Voxel mode, Kanto Dive projects the linked DIVE regions through the active
+world-pipeline camera so the dark areas remain visible from the 3D viewpoint.
+Because the pipeline composites this effect after its scene, the live Surf
+player is redrawn at the same projected position whenever it overlaps a dark
+cell, keeping the hero readable above the marker.
