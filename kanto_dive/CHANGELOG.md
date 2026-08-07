@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.2
+
+- Fixed duplicate player/mount rendering over dark DIVE zones in Voxel mode when Dramatic Sky Ride is active.
+- Kanto Dive now detects Dramatic Sky Ride flight, ground-ride and water-ride states through its public exports.
+- While Dramatic Sky Ride owns the mounted player render, Kanto Dive no longer calls `Player:draw()` a second time from its post-world DIVE tint pass.
+- Preserved the existing dark DIVE-zone projection in Voxel mode and the normal 2D/Tilt rendering path.
+
 ## 1.5.1
 
 - Restored always-visible dark DIVE zones in Voxel mode following playtest feedback.
