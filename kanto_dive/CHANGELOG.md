@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.3
+
+- Added the GitHub repository identifier used by the Gen1Recomp launcher and Mod Index for update tracking.
+- Switched the release ZIP to the Mod Index-compatible layout with `manifest.json` at the archive root.
+- No gameplay behaviour changed from 1.5.2.
+
 ## 1.5.2
 
 - Fixed duplicate player/mount rendering over dark DIVE zones in Voxel mode when Dramatic Sky Ride is active.
