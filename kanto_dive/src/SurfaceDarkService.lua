@@ -200,10 +200,35 @@ end
 -- position whenever the player overlaps a dark-water cell. This is not a HUD
 -- copy: it is anchored through the pipeline's own world projection and uses
 -- the same Player:draw pose, Surf sheet, palette and animation as the engine.
+local function dramaticSkyRideOwnsPlayer(service)
+  local mod = service and service.mod
+  if not (mod and type(mod.find) == "function") then return false end
+
+  local okFind, handle = pcall(mod.find, mod, "DRAMATIC_SKY_RIDE")
+  local exports = okFind and handle and handle.exports or nil
+  if type(exports) ~= "table" then return false end
+
+  for _, name in ipairs({ "isFlying", "isGroundRiding", "isWaterRiding" }) do
+    local fn = exports[name]
+    if type(fn) == "function" then
+      local ok, active = pcall(fn)
+      if ok and active == true then return true end
+    end
+  end
+  return false
+end
+
 function SurfaceDarkService:redrawPlayerProjected(ctx, project, scale)
   if not (ctx and ctx.state and ctx.state.map and type(project) == "function") then
     return
   end
+
+  -- Dramatic Sky Ride owns Player:pose() while one of its mounts is active.
+  -- Calling Player:draw() a second time from this post-world pass would ask
+  -- that mod for the mount pose again and render a duplicate flying/Surf
+  -- mount over the DIVE tint. Let Dramatic Shape's original world pass remain
+  -- the sole owner of the mounted player render.
+  if dramaticSkyRideOwnsPlayer(self) then return end
   local state = ctx.state
   local player = state.player
   local mapId = state.map.id
