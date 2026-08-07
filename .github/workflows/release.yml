@@ -43,8 +43,13 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           ZIP="kanto_dive-${VERSION}.zip"
-          zip -r "$ZIP" kanto_dive \
-            -x "*/__pycache__/*" "*.pyc" "*.pyo" ".DS_Store" "Thumbs.db"
+          (
+            cd kanto_dive
+            zip -r "../$ZIP" . \
+              -x "*/__pycache__/*" "*.pyc" "*.pyo" ".DS_Store" "Thumbs.db"
+          )
+          unzip -Z1 "$ZIP" | grep -qx 'manifest.json'
+          unzip -t "$ZIP"
           sha256sum "$ZIP" > "${ZIP}.sha256"
 
       - name: Prepare release notes
@@ -65,12 +70,11 @@ jobs:
           - SURF blocked while already underwater
           - Route 19 Reef Passage with two entrances and an underwater corridor
           - Route 20 Seafloor, Seafoam Sunken Cave, and Route 21 Trench
+          - Gen1Recomp Mod Index / launcher-compatible ZIP layout
 
           ### Installation
 
-          Download `kanto_dive-${VERSION}.zip`, extract it, and copy the included `kanto_dive` folder into `Gen1Recomp/mods/`.
-
-          The final path must be `Gen1Recomp/mods/kanto_dive/manifest.json`.
+          Import `kanto_dive-${VERSION}.zip` directly through the Gen1Recomp launcher. For manual installation, create `Gen1Recomp/mods/kanto_dive/` and extract the ZIP contents directly into that folder so `manifest.json` is at `Gen1Recomp/mods/kanto_dive/manifest.json`.
           EOF
 
       - name: Create or update GitHub release
