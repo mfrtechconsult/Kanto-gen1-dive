@@ -16,6 +16,7 @@ Download the latest ready-to-install ZIP from the [GitHub Releases page](https:/
 - Dark DIVE water visible in 2D, Tilt, and Voxel modes
 - Surf mount sprite and bobbing animation preserved underwater
 - SURF hidden and rejected while already underwater
+- Dramatic Sky Ride compatibility: mounted players are no longer rendered twice over Voxel DIVE zones
 - Route 19 Reef Passage with two separate entrances and an underwater corridor
 - Route 20 Seafloor
 - Seafoam Sunken Cave
@@ -25,7 +26,7 @@ Download the latest ready-to-install ZIP from the [GitHub Releases page](https:/
 
 ## Installation
 
-1. Download `kanto_dive-1.5.1.zip` from Releases.
+1. Download `kanto_dive-1.5.2.zip` from Releases.
 2. Extract the archive.
 3. Copy the included `kanto_dive` folder into:
 
@@ -90,7 +91,7 @@ README.md              Project overview
 
 ## Current version
 
-**Kanto Dive 1.5.1**
+**Kanto Dive 1.5.2**
 
 See the [changelog](kanto_dive/CHANGELOG.md) for version details.
 
