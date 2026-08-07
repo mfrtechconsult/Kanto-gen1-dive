@@ -1,7 +1,7 @@
 {
   "id": "kanto_dive",
   "name": "Kanto Dive",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "api": 2,
   "entry": "main.lua",
   "profile": "overhaul",
@@ -9,9 +9,11 @@
   "game_version": ">=0.0.0-0 <2.0.0",
   "priority": 200,
   "dependencies": [],
-  "optional_dependencies": [],
+  "optional_dependencies": [
+    "DRAMATIC_SKY_RIDE"
+  ],
   "conflicts": [],
-  "description": "Adds HM06 DIVE with Tiled-authored paired surface/underwater regions, 2D and Voxel dark-water markers, Emerald-style bidirectional mappings, and seafloor maps.",
+  "description": "Adds HM06 DIVE with Tiled-authored paired surface/underwater regions, 2D and Voxel dark-water markers, Emerald-style bidirectional mappings, seafloor maps, and Dramatic Sky Ride compatibility.",
   "permissions": [
     "engine_internals"
   ]
