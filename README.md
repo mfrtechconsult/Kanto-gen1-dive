@@ -8,6 +8,8 @@ The mod is written and distributed entirely in English. It contains no commercia
 
 Download the latest ready-to-install ZIP from the [GitHub Releases page](https://github.com/mfrtechconsult/Kanto-gen1-dive/releases/latest).
 
+Starting with version `1.5.3`, the release ZIP uses the Gen1Recomp Mod Index / launcher layout with `manifest.json` directly at the archive root.
+
 ## Main features
 
 - HM06 DIVE as a usable battle move and field action
@@ -26,22 +28,28 @@ Download the latest ready-to-install ZIP from the [GitHub Releases page](https:/
 
 ## Installation
 
-1. Download `kanto_dive-1.5.2.zip` from Releases.
-2. Extract the archive.
-3. Copy the included `kanto_dive` folder into:
+### Launcher / Mod Index
+
+Import `kanto_dive-1.5.3.zip` directly through the Gen1Recomp launcher.
+
+### Manual installation
+
+1. Download `kanto_dive-1.5.3.zip` from Releases.
+2. Create:
 
 ```text
-<Gen1Recomp>/mods/
+<Gen1Recomp>/mods/kanto_dive/
 ```
 
-The final path must be:
+3. Extract the ZIP contents directly into that folder.
+4. Confirm the final path is:
 
 ```text
 <Gen1Recomp>/mods/kanto_dive/manifest.json
 ```
 
-4. Enable **Kanto Dive** in the F10 mod manager.
-5. Restart Gen1Recomp completely.
+5. Enable **Kanto Dive** in the F10 mod manager.
+6. Restart Gen1Recomp completely.
 
 ## Obtaining HM06
 
@@ -84,14 +92,14 @@ See [MAPPING_GUIDE.md](kanto_dive/MAPPING_GUIDE.md) for the complete authoring w
 ## Repository layout
 
 ```text
-kanto_dive/            Installable Gen1Recomp mod
+kanto_dive/            Installable Gen1Recomp mod source
 .github/workflows/     Automated GitHub release packaging
 README.md              Project overview
 ```
 
 ## Current version
 
-**Kanto Dive 1.5.2**
+**Kanto Dive 1.5.3**
 
 See the [changelog](kanto_dive/CHANGELOG.md) for version details.
 
