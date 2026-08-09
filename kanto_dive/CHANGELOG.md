@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.4-test.1
+
+- Renumbered DIVE from HM06 to canonical Generation III HM08 while preserving the stable `HM_DIVE` item id and historical reward flag for save compatibility.
+- Added `CRYSTAL_251` as an optional dependency so HM06 Whirlpool and HM07 Waterfall can coexist with DIVE.
+- Changed TM/HM compatibility patches to additive `__append` merges, preserving overhaul-owned compatibility tables.
+- Added canonical RSE HM08 DIVE compatibility for 18 Generation II species when Crystal 251 is loaded.
+- Added Crystal 251-aware underwater encounter tables for Route 19, Route 20, Seafoam Sunken Cave and Route 21.
+- Kept all Dramatic Sky Ride and Voxel dark-water compatibility from 1.5.3.
+
 ## 1.5.3
 
 - Added the GitHub repository identifier used by the Gen1Recomp launcher and Mod Index for update tracking.
