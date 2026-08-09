@@ -27,6 +27,65 @@ local function appendUnique(list, value)
   return out
 end
 
+local function contains(list, value)
+  for _, entry in ipairs(list or {}) do
+    if entry == value then return true end
+  end
+  return false
+end
+
+local function findOptionalMod(mod, id)
+  if not (mod and type(mod.find) == "function") then return nil end
+
+  -- Current API exposes mod.find as a bound helper, while a few older/test
+  -- harnesses model it as a method. Support both without making Crystal 251 a
+  -- hard dependency.
+  local ok, handle = pcall(function() return mod.find(id) end)
+  if ok and handle then return handle end
+  ok, handle = pcall(function() return mod:find(id) end)
+  if ok then return handle end
+  return nil
+end
+
+local function crystal251Ready(mod)
+  return findOptionalMod(mod, "CRYSTAL_251") ~= nil
+    and mod.content.pokemon:get("TOTODILE") ~= nil
+    and mod.content.pokemon:get("LUGIA") ~= nil
+end
+
+local function addDiveCompatibility(mod, speciesIds, sourceName)
+  local added = 0
+  for _, speciesId in ipairs(speciesIds or {}) do
+    local species = mod.content.pokemon:get(speciesId)
+    if species then
+      if not contains(species.tmhm, "DIVE") then
+        -- List extension wrappers compose with overhaul-owned TM/HM tables.
+        -- This is deliberately additive so Crystal 251 remains the owner of
+        -- its imported compatibility data.
+        mod.content.pokemon:patch(speciesId, {
+          tmhm = { __append = { "DIVE" } },
+        })
+        added = added + 1
+      end
+    elseif sourceName ~= "Crystal 251" then
+      mod.log:warn("Skipping DIVE compatibility for unknown species %s", speciesId)
+    end
+  end
+  return added
+end
+
+local function encountersAvailable(mod, encounters)
+  if type(encounters) ~= "table" then return false end
+  for _, group in pairs(encounters) do
+    for _, slot in ipairs((group and group.slots) or {}) do
+      if slot.species and not mod.content.pokemon:get(slot.species) then
+        return false
+      end
+    end
+  end
+  return true
+end
+
 function Content.register(mod)
   -- Surface DIVE indicators are drawn directly over the map water by
   -- SurfaceDarkService. No decorative NPC objects are registered.
@@ -45,11 +104,13 @@ function Content.register(mod)
   if surf and surf.anim ~= nil then dive.anim = surf.anim end
   mod.content.moves:register("DIVE", dive)
 
+  -- Keep the stable item id for existing saves, but use the canonical RSE
+  -- number. This leaves HM06/HM07 free for Crystal 251's Whirlpool/Waterfall.
   mod.content.items:register("HM_DIVE", {
     id = "HM_DIVE",
-    name = "HM06",
+    name = "HM08",
     price = 0,
-    machine = { kind = "HM", move = "DIVE", number = 6 },
+    machine = { kind = "HM", move = "DIVE", number = 8 },
     tossable = false,
     keyItem = true,
   })
@@ -62,15 +123,17 @@ function Content.register(mod)
     mod.log:error("Could not load DIVE compatibility: %s", tostring(compatibilityError))
     return nil
   end
-  for _, speciesId in ipairs(compatibility) do
-    local species = mod.content.pokemon:get(speciesId)
-    if species then
-      mod.content.pokemon:patch(speciesId, {
-        tmhm = appendUnique(species.tmhm or {}, "DIVE"),
-      })
-    else
-      mod.log:warn("Skipping DIVE compatibility for unknown species %s", speciesId)
+  addDiveCompatibility(mod, compatibility, "Kanto Dive")
+
+  local hasCrystal251 = crystal251Ready(mod)
+  if hasCrystal251 then
+    local crystalCompatibility, crystalError = loadLua(mod, "data/compatibility_crystal251.lua")
+    if not crystalCompatibility then
+      mod.log:error("Could not load Crystal 251 DIVE compatibility: %s", tostring(crystalError))
+      return nil
     end
+    local added = addDiveCompatibility(mod, crystalCompatibility, "Crystal 251")
+    mod.log:info("Crystal 251 integration enabled; added DIVE compatibility to %d Gen II species", added)
   end
 
   local blocks = {
@@ -124,7 +187,13 @@ function Content.register(mod)
     end
     mod.content.maps:register(map.id, map)
     if entry.song then mod.content.map_songs:register(map.id, entry.song) end
-    if entry.encounters then mod.content.encounters:register(map.id, entry.encounters) end
+
+    local encounters = entry.encounters
+    if hasCrystal251 and entry.crystal251Encounters
+        and encountersAvailable(mod, entry.crystal251Encounters) then
+      encounters = entry.crystal251Encounters
+    end
+    if encounters then mod.content.encounters:register(map.id, encounters) end
   end
 
   return true
