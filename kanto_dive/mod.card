@@ -1,20 +1,20 @@
 return {
-  summary = "Adds HM06 DIVE and coordinate-linked underwater layers below Kanto.",
+  summary = "Adds HM08 DIVE and coordinate-linked underwater layers below Kanto.",
   author = "Mra YT",
   tags = { "mechanic", "content", "exploration", "maps" },
   differences = {
     changed = {
-      "Selected Kanto Water species can learn DIVE.",
-      "The Cinnabar Lab Metronome scientist has a post-Blaine HM06 branch.",
+      "Selected Kanto Water species can learn DIVE; Crystal 251 adds canonical Gen II HM08 compatibility.",
+      "The Cinnabar Lab Metronome scientist has a post-Blaine HM08 branch.",
       "The Surf mount and bobbing animation remain active underwater.",
       "SURF cannot be selected again while underwater.",
     },
     added = {
-      "HM06 DIVE and its field action.",
+      "HM08 DIVE and its field action.",
       "Tiled-authored paired Route 19, Route 20 and Route 21 underwater layers.",
       "Seafoam Sunken Cave.",
       "Per-cell DIVE and SURFACE permissions.",
-      "Darkened surface water on DIVE cells in 2D and Tilt modes without Voxel overlay artifacts.",
+      "Darkened surface water on DIVE cells in 2D, Tilt and Voxel modes, with Dramatic Sky Ride duplicate-render protection.",
       "Paired DiveZones/DiveLandings authoring in Tiled and a reusable inter-mod zone API.",
     },
     known = {
