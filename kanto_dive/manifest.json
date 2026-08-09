@@ -10,10 +10,11 @@
   "priority": 200,
   "dependencies": [],
   "optional_dependencies": [
-    "DRAMATIC_SKY_RIDE"
+    "DRAMATIC_SKY_RIDE",
+    "overworld_wild_spawns"
   ],
   "conflicts": [],
-  "description": "Adds HM06 DIVE with Tiled-authored paired surface/underwater regions, 2D and Voxel dark-water markers, Emerald-style bidirectional mappings, seafloor maps, and Dramatic Sky Ride compatibility.",
+  "description": "Adds HM06 DIVE with Tiled-authored paired surface/underwater regions, 2D and Voxel dark-water markers, Emerald-style bidirectional mappings, seafloor maps, and compatibility with Dramatic Sky Ride and Wilds of Kanto.",
   "permissions": [
     "engine_internals"
   ],
