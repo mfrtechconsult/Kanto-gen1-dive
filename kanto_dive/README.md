@@ -1,6 +1,6 @@
 # Kanto Dive
 
-Kanto Dive adds **HM06 DIVE** and Emerald-style coordinate-linked underwater
+Kanto Dive adds **HM08 DIVE** and Emerald-style coordinate-linked underwater
 layers to Gen1Recomp. The mod is written and distributed entirely in English.
 
 ## Included content
@@ -28,16 +28,16 @@ Copy the `kanto_dive` directory into Gen1Recomp's `mods` directory:
 
 Enable **Kanto Dive** in the F10 mod manager, then restart the game when asked.
 
-## Obtaining HM06
+## Obtaining HM08
 
 1. Defeat Blaine and obtain the Volcano Badge.
 2. Visit the Metronome Room in the Cinnabar Pokemon Lab.
 3. Talk to the scientist who normally gives TM35.
-4. He gives HM06 without removing or replacing the original TM35 reward.
+4. He gives HM08 without removing or replacing the original TM35 reward.
 
 ## Using DIVE and SURFACE
 
-Teach HM06 to a compatible Pokemon and Surf onto a mapped deep-water cell on
+Teach HM08 to a compatible Pokemon and Surf onto a mapped deep-water cell on
 Route 19, Route 20 or Route 21. DIVE appears in that Pokemon's party submenu only when
 that exact cell has an underwater link.
 
@@ -59,6 +59,23 @@ is not permitted.
 The player remains in the engine's Surf movement state underwater. This keeps
 the Surf mount sprite, bobbing animation and water collision continuous while
 the underwater map's own music plays.
+
+## Crystal 251 compatibility
+
+Kanto Dive uses the canonical Generation III number **HM08** for DIVE. This
+allows Crystal 251 to keep **HM06 WHIRLPOOL** and **HM07 WATERFALL** without
+numbering collisions. The stable internal item id remains `HM_DIVE`, so saves
+that already received DIVE keep the item after updating.
+
+When `CRYSTAL_251` is enabled and its Crystal ROM import is ready, Kanto Dive:
+
+- appends DIVE to the imported TM/HM lists instead of replacing them;
+- adds the Generation II species that were compatible with HM08 DIVE in RSE;
+- swaps the underwater encounter tables to Gen II-aware ecology on Route 19,
+  Route 20, Seafoam Sunken Cave and Route 21.
+
+Without Crystal 251, the normal Kanto encounter tables and compatibility remain
+unchanged.
 
 ## Map authoring
 
@@ -107,13 +124,14 @@ If an old or manually modified save is loaded on a surfacing map without a
 valid session origin, the emergency SURFACE action returns the player to the
 last healing point. Surface before disabling or removing the mod.
 
+
 ## Paired-region authoring model
 
 Since 1.4.0, DIVE zones are paired explicitly in Tiled. `DiveZones` marks surface cells and `DiveLandings` marks their underwater counterparts. Objects sharing the same `linkId` are translated cell-for-cell in both directions. See `MAPPING_GUIDE.md` and the editable Route 19/20/21 TMX examples.
 
 ## Route 19 compact reef passage
 
-Route 19 contains two separate 4 x 4 DIVE squares at surface cells
+Route 19 now contains two separate 4 x 4 DIVE squares at surface cells
 `(4,30)` and `(12,30)`. They land in two square underwater chambers joined
 by a two-cell-high corridor. Entering through one square and crossing the
 corridor allows the player to surface from the other square.
