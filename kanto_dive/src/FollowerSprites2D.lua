@@ -60,7 +60,10 @@ function FollowerSprites2D:_publicDefinition(species)
         local opts = {
           species = species,
           surface = request.surface,
-          role = "wild",
+          -- The established Wilds/follower provider contract reliably serves
+          -- the animated six-frame sheet through the mount/follower role. The
+          -- entity remains a wild Pokemon; this field only selects sprite art.
+          role = "mount",
           game = Game,
         }
         if request.style then opts.style = request.style end
