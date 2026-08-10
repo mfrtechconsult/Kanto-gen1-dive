@@ -41,17 +41,16 @@ return function(mod)
   local Progression = loadModule(mod, "src/Progression.lua")
   local SurfaceDarkService = loadModule(mod, "src/SurfaceDarkService.lua")
   local JohtoWaterMoves = loadModule(mod, "src/JohtoWaterMoves.lua")
+  local HMForgetGuard = loadModule(mod, "src/HMForgetGuard.lua")
   local zoneDefinitions = loadModule(mod, "data/zones.lua")
   if not (Content and ZoneRegistry and DiveService and Progression
-      and SurfaceDarkService and JohtoWaterMoves and zoneDefinitions) then
+      and SurfaceDarkService and JohtoWaterMoves and HMForgetGuard
+      and zoneDefinitions) then
     return
   end
 
   if not Content.register(mod) then return end
 
-  -- Crystal used its 7th/8th badges for these field moves. Kanto has no
-  -- Glacier/Rising Badge, so preserve the same progression slots with the
-  -- 7th/8th Kanto badges instead of inventing Johto badges in a Kanto save.
   local johtoWater = JohtoWaterMoves.install(mod, {
     whirlpoolBadge = "VOLCANOBADGE",
     waterfallBadge = "EARTHBADGE",
@@ -70,7 +69,7 @@ return function(mod)
       },
     },
   })
-  if not johtoWater then return end
+  if not johtoWater or not HMForgetGuard.install(mod) then return end
 
   local registry = ZoneRegistry.new(mod)
   for id, definition in pairs(zoneDefinitions) do
@@ -111,8 +110,6 @@ return function(mod)
   mod.exports.registerZone = function(id, definition, owner)
     return registry:register(id, definition, owner or "external")
   end
-
-  -- Shared field-move API for map/content mods.
   mod.exports.canWhirlpoolHere = function(game) return johtoWater:canWhirlpool(game) end
   mod.exports.canWaterfallHere = function(game) return johtoWater:canWaterfall(game) end
   mod.exports.registerWhirlpool = function(definition) return johtoWater:registerWhirlpool(definition) end
