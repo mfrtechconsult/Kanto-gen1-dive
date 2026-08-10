@@ -72,12 +72,9 @@ return function(mod)
   })
   if not johtoWater or not HMForgetGuard.install(mod) then return end
 
+  -- DIVE keeps its existing presentation unchanged. These one-time hints are
+  -- only for the two newly introduced Crystal field mechanics.
   HMShowcase.install(mod, {
-    ROUTE_19 = {
-      id = "hm08_dive_route19",
-      move = "DIVE",
-      text = "HM08 DIVE TEST\nDark water marks a\nDIVE entry point.\fSurf onto it and use\nDIVE from the party.",
-    },
     ROUTE_20 = {
       id = "hm06_whirlpool_route20",
       move = "WHIRLPOOL",
