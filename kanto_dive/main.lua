@@ -40,13 +40,15 @@ return function(mod)
   local UnderwaterWildlife2D = loadModule(mod, "src/UnderwaterWildlife2D.lua")
   local UnderwaterIntercept2D = loadModule(mod, "src/UnderwaterIntercept2D.lua")
   local SubmergedWarpLinks2D = loadModule(mod, "src/SubmergedWarpLinks2D.lua")
+  local Salvage2D = loadModule(mod, "src/Salvage2D.lua")
   local seabedProfiles = loadModule(mod, "data/seabed_profiles.lua")
 
   if not (Content and ZoneRegistry and DiveService and Progression
       and JohtoWaterMoves and WaterFeaturePolish and HMForgetGuard and HMShowcase
       and KantoWaterAtlas and Seabed2DGenerator and ScaledSurfaceTargets
       and EncounterPolicy2D and FollowerSprites2D and UnderwaterWildlife2D
-      and UnderwaterIntercept2D and SubmergedWarpLinks2D and seabedProfiles) then
+      and UnderwaterIntercept2D and SubmergedWarpLinks2D and Salvage2D
+      and seabedProfiles) then
     return
   end
 
@@ -113,6 +115,9 @@ return function(mod)
   local submergedWarpLinks = SubmergedWarpLinks2D.new(mod, atlas, service)
   submergedWarpLinks:install()
 
+  local salvage = Salvage2D.new(mod, service, atlas)
+  salvage:install()
+
   local stats = generator:stats(generated)
   if mod.log then
     mod.log:info(
@@ -158,8 +163,6 @@ return function(mod)
     return registry:register(id, definition, owner or "external")
   end
 
-  -- Full-Kanto mode: every real water cell is intended to be diveable, so the
-  -- old dark DIVE marker has no purpose and is deliberately not rendered.
   mod.exports.allWaterDiveable = function() return true end
   mod.exports.surfaceDiveMaskEnabled = function() return false end
   mod.exports.getDiveMarkers = markersFor
@@ -188,6 +191,7 @@ return function(mod)
   mod.exports.oceanInterceptStats = function() return intercept:stats() end
   mod.exports.encounterPolicyStats = function() return encounterPolicy:stats() end
   mod.exports.submergedWarpStats = function() return submergedWarpLinks:stats() end
+  mod.exports.salvageRemaining = function(mapId) return salvage:remaining(mapId) end
 
   mod.exports.canWhirlpoolHere = function(game) return johtoWater:canWhirlpool(game) end
   mod.exports.canWaterfallHere = function(game) return johtoWater:canWaterfall(game) end
