@@ -41,12 +41,13 @@ return function(mod)
   local Progression = loadModule(mod, "src/Progression.lua")
   local SurfaceDarkService = loadModule(mod, "src/SurfaceDarkService.lua")
   local JohtoWaterMoves = loadModule(mod, "src/JohtoWaterMoves.lua")
+  local WaterFeaturePolish = loadModule(mod, "src/WaterFeaturePolish.lua")
   local HMForgetGuard = loadModule(mod, "src/HMForgetGuard.lua")
   local HMShowcase = loadModule(mod, "src/HMShowcase.lua")
   local zoneDefinitions = loadModule(mod, "data/zones.lua")
   if not (Content and ZoneRegistry and DiveService and Progression
-      and SurfaceDarkService and JohtoWaterMoves and HMForgetGuard
-      and HMShowcase and zoneDefinitions) then
+      and SurfaceDarkService and JohtoWaterMoves and WaterFeaturePolish
+      and HMForgetGuard and HMShowcase and zoneDefinitions) then
     return
   end
 
@@ -71,6 +72,7 @@ return function(mod)
     },
   })
   if not johtoWater or not HMForgetGuard.install(mod) then return end
+  if not WaterFeaturePolish.install(mod, johtoWater) then return end
 
   -- DIVE keeps its existing presentation unchanged. These one-time hints are
   -- only for the two newly introduced Crystal field mechanics.
