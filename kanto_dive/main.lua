@@ -40,12 +40,37 @@ return function(mod)
   local DiveService = loadModule(mod, "src/DiveService.lua")
   local Progression = loadModule(mod, "src/Progression.lua")
   local SurfaceDarkService = loadModule(mod, "src/SurfaceDarkService.lua")
+  local JohtoWaterMoves = loadModule(mod, "src/JohtoWaterMoves.lua")
   local zoneDefinitions = loadModule(mod, "data/zones.lua")
-  if not (Content and ZoneRegistry and DiveService and Progression and SurfaceDarkService and zoneDefinitions) then
+  if not (Content and ZoneRegistry and DiveService and Progression
+      and SurfaceDarkService and JohtoWaterMoves and zoneDefinitions) then
     return
   end
 
   if not Content.register(mod) then return end
+
+  -- Crystal used its 7th/8th badges for these field moves. Kanto has no
+  -- Glacier/Rising Badge, so preserve the same progression slots with the
+  -- 7th/8th Kanto badges instead of inventing Johto badges in a Kanto save.
+  local johtoWater = JohtoWaterMoves.install(mod, {
+    whirlpoolBadge = "VOLCANOBADGE",
+    waterfallBadge = "EARTHBADGE",
+    whirlpools = {
+      {
+        id = "route20_seafoam_whirlpool",
+        mapId = "ROUTE_20",
+        x = 49, y = 12, width = 2, height = 4,
+      },
+    },
+    waterfalls = {
+      {
+        id = "route21_central_waterfall",
+        mapId = "ROUTE_21",
+        x = 3, y = 50, width = 14, height = 2,
+      },
+    },
+  })
+  if not johtoWater then return end
 
   local registry = ZoneRegistry.new(mod)
   for id, definition in pairs(zoneDefinitions) do
@@ -74,34 +99,22 @@ return function(mod)
   service:install()
   Progression.install(mod)
 
-  mod.exports.isUnderwater = function()
-    return service:isUnderwater()
-  end
-  mod.exports.getCurrentZone = function()
-    return service:currentZone()
-  end
-  mod.exports.canDiveHere = function(game)
-    return service:canDiveHere(game)
-  end
-  mod.exports.canSurfaceHere = function(game)
-    return service:canSurfaceHere(game)
-  end
-  mod.exports.getDiveTarget = function(mapId, x, y)
-    return registry:diveTarget(mapId, x, y)
-  end
-  mod.exports.getSurfaceTarget = function(mapId, x, y)
-    return registry:surfaceTarget(mapId, x, y)
-  end
-  mod.exports.getDiveMarkers = function(mapId)
-    return surfaceDarkService:cellsFor(mapId)
-  end
-  mod.exports.getVisualDiveMarkers = function(mapId)
-    return surfaceDarkService:cellsFor(mapId)
-  end
-  mod.exports.getDiveMarkerAt = function(mapId, x, y)
-    return surfaceDarkService:cellAt(mapId, x, y)
-  end
+  mod.exports.isUnderwater = function() return service:isUnderwater() end
+  mod.exports.getCurrentZone = function() return service:currentZone() end
+  mod.exports.canDiveHere = function(game) return service:canDiveHere(game) end
+  mod.exports.canSurfaceHere = function(game) return service:canSurfaceHere(game) end
+  mod.exports.getDiveTarget = function(mapId, x, y) return registry:diveTarget(mapId, x, y) end
+  mod.exports.getSurfaceTarget = function(mapId, x, y) return registry:surfaceTarget(mapId, x, y) end
+  mod.exports.getDiveMarkers = function(mapId) return surfaceDarkService:cellsFor(mapId) end
+  mod.exports.getVisualDiveMarkers = function(mapId) return surfaceDarkService:cellsFor(mapId) end
+  mod.exports.getDiveMarkerAt = function(mapId, x, y) return surfaceDarkService:cellAt(mapId, x, y) end
   mod.exports.registerZone = function(id, definition, owner)
     return registry:register(id, definition, owner or "external")
   end
+
+  -- Shared field-move API for map/content mods.
+  mod.exports.canWhirlpoolHere = function(game) return johtoWater:canWhirlpool(game) end
+  mod.exports.canWaterfallHere = function(game) return johtoWater:canWaterfall(game) end
+  mod.exports.registerWhirlpool = function(definition) return johtoWater:registerWhirlpool(definition) end
+  mod.exports.registerWaterfall = function(definition) return johtoWater:registerWaterfall(definition) end
 end
