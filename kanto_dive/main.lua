@@ -42,10 +42,11 @@ return function(mod)
   local SurfaceDarkService = loadModule(mod, "src/SurfaceDarkService.lua")
   local JohtoWaterMoves = loadModule(mod, "src/JohtoWaterMoves.lua")
   local HMForgetGuard = loadModule(mod, "src/HMForgetGuard.lua")
+  local HMShowcase = loadModule(mod, "src/HMShowcase.lua")
   local zoneDefinitions = loadModule(mod, "data/zones.lua")
   if not (Content and ZoneRegistry and DiveService and Progression
       and SurfaceDarkService and JohtoWaterMoves and HMForgetGuard
-      and zoneDefinitions) then
+      and HMShowcase and zoneDefinitions) then
     return
   end
 
@@ -70,6 +71,24 @@ return function(mod)
     },
   })
   if not johtoWater or not HMForgetGuard.install(mod) then return end
+
+  HMShowcase.install(mod, {
+    ROUTE_19 = {
+      id = "hm08_dive_route19",
+      move = "DIVE",
+      text = "HM08 DIVE TEST\nDark water marks a\nDIVE entry point.\fSurf onto it and use\nDIVE from the party.",
+    },
+    ROUTE_20 = {
+      id = "hm06_whirlpool_route20",
+      move = "WHIRLPOOL",
+      text = "HM06 WHIRLPOOL TEST\nA whirlpool blocks the\nSeafoam channel.\fFace it while SURFing\nand use WHIRLPOOL.",
+    },
+    ROUTE_21 = {
+      id = "hm07_waterfall_route21",
+      move = "WATERFALL",
+      text = "HM07 WATERFALL TEST\nA waterfall blocks the\ncentral current.\fDescend freely, then\nuse WATERFALL to climb.",
+    },
+  })
 
   local registry = ZoneRegistry.new(mod)
   for id, definition in pairs(zoneDefinitions) do
