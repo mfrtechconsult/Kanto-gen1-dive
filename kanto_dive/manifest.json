@@ -10,10 +10,12 @@
   "priority": 200,
   "dependencies": [],
   "optional_dependencies": [
-    "DRAMATIC_SKY_RIDE"
+    "DRAMATIC_SKY_RIDE",
+    "overworld_wild_spawns",
+    "CRYSTAL_251"
   ],
   "conflicts": [],
-  "description": "Adds HM06 DIVE with Tiled-authored paired surface/underwater regions, 2D and Voxel dark-water markers, Emerald-style bidirectional mappings, seafloor maps, and Dramatic Sky Ride compatibility.",
+  "description": "Adds HM08 DIVE plus Crystal-style HM06 WHIRLPOOL and HM07 WATERFALL field mechanics, Tiled-authored underwater regions, and compatibility with Dramatic Sky Ride, Wilds of Kanto and optional Crystal 251.",
   "permissions": [
     "engine_internals"
   ],

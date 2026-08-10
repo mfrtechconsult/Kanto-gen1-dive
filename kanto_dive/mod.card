@@ -1,25 +1,28 @@
 return {
-  summary = "Adds HM06 DIVE and coordinate-linked underwater layers below Kanto.",
+  summary = "Adds HM08 DIVE plus Crystal-style HM06 WHIRLPOOL and HM07 WATERFALL exploration mechanics to Kanto.",
   author = "Mra YT",
   tags = { "mechanic", "content", "exploration", "maps" },
   differences = {
     changed = {
-      "Selected Kanto Water species can learn DIVE.",
-      "The Cinnabar Lab Metronome scientist has a post-Blaine HM06 branch.",
+      "Selected Kanto Water species can learn DIVE, WHIRLPOOL and WATERFALL using their canonical compatibility.",
+      "The Cinnabar Lab Metronome scientist gives DIVE as HM08 after Blaine.",
       "The Surf mount and bobbing animation remain active underwater.",
       "SURF cannot be selected again while underwater.",
     },
     added = {
-      "HM06 DIVE and its field action.",
+      "HM08 DIVE and its field action.",
+      "HM06 WHIRLPOOL with removable current barriers that reset on map reload, matching Crystal behavior.",
+      "HM07 WATERFALL with upward climbing while downward traversal remains free.",
+      "Standalone HM06/HM07 acquisition when Crystal 251 is absent, with Crystal 251 ownership respected when installed.",
+      "Public registration APIs for external whirlpool and waterfall regions.",
       "Tiled-authored paired Route 19, Route 20 and Route 21 underwater layers.",
       "Seafoam Sunken Cave.",
       "Per-cell DIVE and SURFACE permissions.",
-      "Darkened surface water on DIVE cells in 2D and Tilt modes without Voxel overlay artifacts.",
-      "Paired DiveZones/DiveLandings authoring in Tiled and a reusable inter-mod zone API.",
+      "Darkened surface water on DIVE cells in 2D and world pipelines.",
     },
     known = {
-      "DIVE is a one-turn Water attack in battle.",
-      "Route 19, Route 20 and Route 21 are mapped in this release; the authoring tools support adding the remaining sea routes.",
+      "DIVE is currently a one-turn Water attack in battle.",
+      "Kanto maps use the 7th/8th Kanto badges as equivalents of Crystal's Glacier/Rising Badge field-move gates.",
     },
   },
   credits = {
