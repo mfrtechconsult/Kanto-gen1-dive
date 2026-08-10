@@ -99,11 +99,8 @@ function Seabed2DGenerator:mapDefinition(entry, index)
   for by = 0, height - 1 do
     for bx = 0, width - 1 do
       local mask = maskAtBlock(entry, bx, by)
-      if mask == 15 then
-        blocks[#blocks + 1] = decorativeBlock(entry, bx, by)
-      else
-        blocks[#blocks + 1] = 16 + mask
-      end
+      if mask == 15 then blocks[#blocks + 1] = decorativeBlock(entry, bx, by)
+      else blocks[#blocks + 1] = 16 + mask end
     end
   end
 
@@ -134,33 +131,35 @@ function Seabed2DGenerator:mapDefinition(entry, index)
   }
 end
 
+-- ZoneRegistry's historical public API remains 1:1. Generated Full-Kanto
+-- links therefore use one link per actual surface-water cell and target the
+-- centre of that cell's enlarged underwater footprint. ScaledSurfaceTargets
+-- expands the reverse SURFACE map across the whole footprint after registration.
 function Seabed2DGenerator:zoneDefinition()
   local zone = {
     requiredBadge = "VOLCANOBADGE",
-    links = {},
-    submergedMaps = {},
-    generated = true,
+    links = {}, submergedMaps = {}, generated = true,
   }
 
   for _, surfaceId in ipairs(self.atlas:mapIds()) do
     local entry = self.atlas:surface(surfaceId)
     local scale = entry.underwaterScale or 1
+    local offset = math.floor(scale / 2)
     zone.submergedMaps[#zone.submergedMaps + 1] = entry.underwaterMapId
-    for y, runs in pairs(entry.surfaceCellRuns or {}) do
-      for runIndex, run in ipairs(runs) do
-        zone.links[#zone.links + 1] = {
-          id = string.format("atlas_%s_%d_%d", surfaceId:lower(), y, runIndex),
-          surface = { mapId = surfaceId, x = run.x0, y = y },
-          underwater = {
-            mapId = entry.underwaterMapId,
-            x = run.x0 * scale,
-            y = y * scale,
-          },
-          width = run.x1 - run.x0 + 1,
-          height = 1,
-          scale = scale,
-        }
-      end
+    for key in pairs(entry.surfaceWater or {}) do
+      local x, y = key:match("^(%-?%d+):(%-?%d+)$")
+      x, y = tonumber(x), tonumber(y)
+      zone.links[#zone.links + 1] = {
+        id = string.format("atlas_%s_%d_%d", surfaceId:lower(), x, y),
+        surface = { mapId = surfaceId, x = x, y = y },
+        underwater = {
+          mapId = entry.underwaterMapId,
+          x = x * scale + offset,
+          y = y * scale + offset,
+        },
+        width = 1, height = 1,
+        kantoDiveScale = scale,
+      }
     end
   end
 
@@ -174,19 +173,12 @@ function Seabed2DGenerator:zoneDefinition()
 end
 
 function Seabed2DGenerator:build()
-  local generated = {
-    maps = {},
-    encounters = {},
-    activeEncounters = {},
-    zones = {},
-  }
+  local generated = { maps = {}, encounters = {}, activeEncounters = {}, zones = {} }
 
   for index, surfaceId in ipairs(self.atlas:mapIds()) do
     local entry = self.atlas:surface(surfaceId)
     local map = self:mapDefinition(entry, index)
-    if not self.mod.content.maps:get(map.id) then
-      self.mod.content.maps:register(map.id, map)
-    end
+    if not self.mod.content.maps:get(map.id) then self.mod.content.maps:register(map.id, map) end
     if entry.profile and entry.profile.music then
       self.mod.content.map_songs:register(map.id, entry.profile.music)
     end
