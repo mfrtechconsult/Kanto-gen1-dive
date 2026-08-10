@@ -6,6 +6,23 @@ local function uniform(tile)
   return row
 end
 
+-- Blocks 16..31 encode the exact 2x2 movement-cell underwater mask for one
+-- 32x32 block. Tile 0 is swimmable underwater water; tile 15 is solid seabed
+-- boundary. Full-water blocks may later be replaced by decorative all-water
+-- blocks by the 2D seabed generator without changing collision.
+local function collisionMaskBlock(mask)
+  local block = {}
+  for ty = 0, 3 do
+    for tx = 0, 3 do
+      local cellX, cellY = math.floor(tx / 2), math.floor(ty / 2)
+      local bit = cellY == 0 and (cellX == 0 and 1 or 2)
+        or (cellX == 0 and 4 or 8)
+      block[#block + 1] = (mask % (bit * 2) >= bit) and 0 or 15
+    end
+  end
+  return block
+end
+
 local function loadLua(mod, relativePath)
   local source, readError = mod:read(relativePath)
   if not source then return nil, readError end
@@ -76,7 +93,6 @@ function Content.register(mod)
     mod.content.moves:register("DIVE", dive)
   end
 
-  -- Stable item id retained for old saves; HM08 is the canonical DIVE slot.
   local existingItem = mod.content.items:get("HM_DIVE")
   if existingItem then
     local machine = existingItem.machine
@@ -124,35 +140,23 @@ function Content.register(mod)
     uniform(8), uniform(9), uniform(10), uniform(11),
     uniform(12), uniform(13), uniform(14), uniform(15),
   }
+  for mask = 0, 15 do blocks[#blocks + 1] = collisionMaskBlock(mask) end
 
-  mod.content.tilesets:register("KD_UNDERWATER", {
-    id = "KD_UNDERWATER",
-    image = mod.assets:path("assets/tilesets/kanto_dive_underwater.png"),
-    imageWidth = 64, imageHeight = 32, tilesPerRow = 8,
-    blocks = blocks,
-    walkable = {},
-    warpTiles = { 6 },
-    waterTiles = { 0, 1, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14 },
-    shoreTiles = {}, grassTile = 8, trueColor = true,
-  })
-
-  local catalog, catalogError = loadLua(mod, "data/maps.lua")
-  if not catalog then
-    mod.log:error("Could not load the underwater map catalog: %s", tostring(catalogError))
-    return nil
-  end
-  for index, entry in ipairs(catalog) do
-    local map, mapError = loadLua(mod, entry.file)
-    if not map then
-      mod.log:error("Could not load map catalog entry %d (%s): %s",
-        index, tostring(entry.file), tostring(mapError))
-      return nil
-    end
-    mod.content.maps:register(map.id, map)
-    if entry.song then mod.content.map_songs:register(map.id, entry.song) end
-    if entry.encounters then mod.content.encounters:register(map.id, entry.encounters) end
+  if not mod.content.tilesets:get("KD_UNDERWATER") then
+    mod.content.tilesets:register("KD_UNDERWATER", {
+      id = "KD_UNDERWATER",
+      image = mod.assets:path("assets/tilesets/kanto_dive_underwater.png"),
+      imageWidth = 64, imageHeight = 32, tilesPerRow = 8,
+      blocks = blocks,
+      walkable = {},
+      warpTiles = { 6 },
+      waterTiles = { 0, 1, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14 },
+      shoreTiles = {}, grassTile = 0, trueColor = true,
+    })
   end
 
+  -- Static KD_ROUTE19/20/21/SEAFOAM maps are no longer registered here.
+  -- The Full-Kanto 2D generator owns underwater map creation at runtime.
   return true
 end
 
