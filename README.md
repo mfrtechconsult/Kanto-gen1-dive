@@ -37,6 +37,16 @@ Kanto Dive keeps the stable `HM_DIVE` item id for save compatibility, but DIVE i
 - **HM07 — WATERFALL**
 - **HM08 — DIVE**
 
+## In-game HM showcase
+
+The Wilds compatibility branch contains one immediately identifiable field example for each water HM. A one-time in-game hint appears when entering each showcase route for the first time on a save.
+
+- **Route 19 — HM08 DIVE:** Surf to either dark-water reef entrance near the south end of the route. The dark 4×4 water regions are real DIVE links to `KD_ROUTE19_REEF_PASSAGE`. Use DIVE from the party while standing on the dark water, explore the underwater passage, then use SURFACE on a linked cell to return.
+- **Route 20 — HM06 WHIRLPOOL:** The Seafoam channel contains a whirlpool spanning the full 4-cell-high channel at `x=49..50`. It blocks Surf movement until a Pokémon uses WHIRLPOOL while facing it. The barrier stays cleared for the current map visit and returns after reloading the route.
+- **Route 21 — HM07 WATERFALL:** The central current contains a 14-cell-wide waterfall at `y=50..51`. Surfing downward through it is allowed. Returning north is blocked until a Pokémon uses WATERFALL from directly below the fall.
+
+These examples deliberately overlap the existing DIVE-enabled sea routes so the three HMs can be tested as one continuous water-exploration feature set rather than as isolated debug rooms.
+
 ## Crystal 251 compatibility
 
 Crystal 251 is optional.
