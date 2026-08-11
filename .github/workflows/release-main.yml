@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: write
+  issues: write
+  pull-requests: write
 
 jobs:
   release:
@@ -85,3 +87,17 @@ jobs:
           else
             gh release create "$TAG" "$ZIP" "$ZIP.sha256" --target "$GITHUB_SHA" --title "Kanto Dive ${VERSION}" --notes-file release-notes.md
           fi
+          gh release view "$TAG" --json url,tagName,name,assets > release-state.json
+          cat release-state.json
+
+      - name: Confirm publication on merged PR
+        if: ${{ steps.version.outputs.version == '1.6.0' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ZIP='Kanto-Dive-1.6.0-Launcher-Ready.zip'
+          URL=$(python3 -c 'import json; print(json.load(open("release-state.json"))["url"])')
+          ASSETS=$(python3 -c 'import json; print(", ".join(a["name"] for a in json.load(open("release-state.json"))["assets"]))')
+          gh pr comment 4 --body "Release v1.6.0 published successfully. Launcher-ready asset: \`$ZIP\`. Release: $URL. Assets verified by the release workflow: $ASSETS"
