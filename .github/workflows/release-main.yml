@@ -53,23 +53,23 @@ jobs:
       - name: Write release notes
         shell: bash
         run: |
-          cat > release-notes.md <<'EOF'
-          ## Kanto Dive 1.6.0
+          VERSION='${{ steps.version.outputs.version }}'
+          cat > release-notes.md <<EOF
+          ## Kanto Dive ${VERSION}
 
-          Full-Kanto 2D HM08 DIVE overhaul for Gen1Recomp.
+          This maintenance release makes visible underwater Pokemon encounters behave like real overworld contact encounters.
 
           Highlights:
-          - every real Kanto water area supports DIVE through the generated 2D underwater atlas;
-          - continuous underwater hydrology beneath bridges, docks and pontoons;
-          - enlarged open-ocean spaces while preserving a strictly 2D presentation;
-          - seamless underwater route connections and submerged cave/harbor links;
-          - visible, Pokedex-scaled underwater Pokemon with Wilds of Kanto;
-          - invisible/random underwater encounters disabled when Wilds of Kanto is active;
-          - sparse 2D salvage and biome-aware underwater scenery;
-          - HM06 WHIRLPOOL, HM07 WATERFALL and HM08 DIVE retained;
-          - HM08 is now given immediately by a fixed researcher outside, just left of the Cinnabar Lab, with no badge or story requirement.
+          - underwater battles now trigger only when the player actually touches the visible Pokemon sprite;
+          - removed the old 2.5-cell proximity interception radius;
+          - removed the extra long-range bonus previously applied to large Pokemon;
+          - contact follows the displayed Pokédex-scaled sprite footprint;
+          - visible species/level, Wilds-only encounter policy and post-battle cooldowns are preserved;
+          - includes regression coverage for long-range non-contact, true contact and large scaled sprites.
 
-          The attached ZIP is ready to import directly in the Gen1Recomp launcher: `manifest.json` and `main.lua` are at the archive root.
+          Everything from the Full-Kanto 1.6.0 overhaul remains included.
+
+          The attached ZIP is ready to import directly in the Gen1Recomp launcher: \`manifest.json\` and \`main.lua\` are at the archive root.
           EOF
 
       - name: Create or update GitHub release
@@ -91,13 +91,13 @@ jobs:
           cat release-state.json
 
       - name: Confirm publication on merged PR
-        if: ${{ steps.version.outputs.version == '1.6.0' }}
+        if: ${{ steps.version.outputs.version == '1.6.1' }}
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          ZIP='Kanto-Dive-1.6.0-Launcher-Ready.zip'
+          ZIP='Kanto-Dive-1.6.1-Launcher-Ready.zip'
           URL=$(python3 -c 'import json; print(json.load(open("release-state.json"))["url"])')
           ASSETS=$(python3 -c 'import json; print(", ".join(a["name"] for a in json.load(open("release-state.json"))["assets"]))')
-          gh pr comment 4 --body "Release v1.6.0 published successfully. Launcher-ready asset: \`$ZIP\`. Release: $URL. Assets verified by the release workflow: $ASSETS"
+          gh pr comment 5 --body "Release v1.6.1 published successfully. Launcher-ready asset: \`$ZIP\`. Release: $URL. Assets verified by the release workflow: $ASSETS"
