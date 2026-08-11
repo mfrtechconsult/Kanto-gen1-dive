@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.6.0
+
+- Promoted the Full-Kanto 2D underwater overhaul to the stable release line.
+- Every real Kanto water area now participates in the generated DIVE/SURFACE atlas; the old dark surface DIVE mask is removed.
+- Added continuous underwater hydrology beneath bridges, docks and pontoons without allowing DIVE/SURFACE from the structure itself.
+- Added seamless underwater route connections, submerged cave/harbor links and enlarged open-ocean spaces while remaining strictly 2D.
+- Added biome-aware 2D seabed scenery, sparse salvage and Pokedex-scaled visible underwater Pokemon.
+- With Wilds of Kanto active, invisible/random underwater encounters are disabled and battles come only from visible overworld Pokemon.
+- Retained HM06 WHIRLPOOL, HM07 WATERFALL, HM08 DIVE, Crystal 251 and Dramatic Sky Ride compatibility.
+- HM08 DIVE is now given immediately by a fixed researcher outside, just left of the Cinnabar Lab, with no badge or story requirement.
+- Added automated launcher-ready GitHub releases with `manifest.json` and `main.lua` at the ZIP root.
+
 ## 1.5.3
 
 - Added the GitHub repository identifier used by the Gen1Recomp launcher and Mod Index for update tracking.

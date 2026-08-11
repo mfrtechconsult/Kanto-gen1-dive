@@ -1,0 +1,87 @@
+name: Release launcher ZIP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION=$(python3 -c 'import json; print(json.load(open("kanto_dive/manifest.json"))["version"])')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Build launcher-ready ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION='${{ steps.version.outputs.version }}'
+          ZIP="Kanto-Dive-${VERSION}-Launcher-Ready.zip"
+          (
+            cd kanto_dive
+            zip -r "../$ZIP" . -x '*.DS_Store' '__MACOSX/*'
+          )
+          python3 - "$ZIP" <<'PY'
+          import json, sys, zipfile
+          path = sys.argv[1]
+          with zipfile.ZipFile(path) as z:
+              names = z.namelist()
+              assert 'manifest.json' in names, 'manifest.json must be at ZIP root'
+              assert 'main.lua' in names, 'main.lua must be at ZIP root'
+              assert not any(n.lower().endswith('.zip') for n in names), 'nested ZIP found'
+              manifest = json.loads(z.read('manifest.json'))
+              assert manifest['version']
+          print('launcher-ready ZIP verified:', path)
+          PY
+          sha256sum "$ZIP" > "$ZIP.sha256"
+
+      - name: Write release notes
+        shell: bash
+        run: |
+          cat > release-notes.md <<'EOF'
+          ## Kanto Dive 1.6.0
+
+          Full-Kanto 2D HM08 DIVE overhaul for Gen1Recomp.
+
+          Highlights:
+          - every real Kanto water area supports DIVE through the generated 2D underwater atlas;
+          - continuous underwater hydrology beneath bridges, docks and pontoons;
+          - enlarged open-ocean spaces while preserving a strictly 2D presentation;
+          - seamless underwater route connections and submerged cave/harbor links;
+          - visible, Pokedex-scaled underwater Pokemon with Wilds of Kanto;
+          - invisible/random underwater encounters disabled when Wilds of Kanto is active;
+          - sparse 2D salvage and biome-aware underwater scenery;
+          - HM06 WHIRLPOOL, HM07 WATERFALL and HM08 DIVE retained;
+          - HM08 is now given immediately by a fixed researcher outside, just left of the Cinnabar Lab, with no badge or story requirement.
+
+          The attached ZIP is ready to import directly in the Gen1Recomp launcher: `manifest.json` and `main.lua` are at the archive root.
+          EOF
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION='${{ steps.version.outputs.version }}'
+          TAG='${{ steps.version.outputs.tag }}'
+          ZIP="Kanto-Dive-${VERSION}-Launcher-Ready.zip"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ZIP" "$ZIP.sha256" --clobber
+            gh release edit "$TAG" --title "Kanto Dive ${VERSION}" --notes-file release-notes.md
+          else
+            gh release create "$TAG" "$ZIP" "$ZIP.sha256" --target "$GITHUB_SHA" --title "Kanto Dive ${VERSION}" --notes-file release-notes.md
+          fi

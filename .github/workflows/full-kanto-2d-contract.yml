@@ -1,0 +1,50 @@
+name: Full-Kanto 2D contract
+
+on:
+  push:
+    branches:
+      - dev/deep-dive-functional-backport
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lua
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.4
+      - name: Parse all Lua sources
+        run: find kanto_dive -name '*.lua' -print0 | xargs -0 -n1 luac5.4 -p
+      - name: Test unconditional exterior HM08 researcher
+        run: lua5.4 kanto_dive/tools/test_hm08_researcher.lua
+      - name: Test Full-Kanto 2D atlas and scaled travel
+        run: lua5.4 kanto_dive/tools/test_full_kanto_2d.lua
+      - name: Test Wilds visible-only underwater encounters
+        run: lua5.4 kanto_dive/tools/test_wilds_visible_only_2d.lua
+      - name: Guard Full-Kanto runtime architecture
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'KantoWaterAtlas' kanto_dive/main.lua
+          grep -q 'Seabed2DGenerator' kanto_dive/main.lua
+          grep -q 'UnderwaterWildlife2D' kanto_dive/main.lua
+          grep -q 'UnderwaterIntercept2D' kanto_dive/main.lua
+          grep -q 'Salvage2D' kanto_dive/main.lua
+          grep -q 'getVisualDiveMarkers = function() return {} end' kanto_dive/main.lua
+          ! grep -q 'SurfaceDarkService' kanto_dive/main.lua
+          ! grep -q 'data/maps.lua' kanto_dive/src/Content.lua
+          grep -q 'mod.hooks:wrap("encounter.roll"' kanto_dive/src/EncounterPolicy2D.lua
+          grep -q 'mod.hooks:wrap("encounter.species"' kanto_dive/src/EncounterPolicy2D.lua
+          grep -q 'mod.hooks:wrap("input.step"' kanto_dive/src/UnderwaterWildlife2D.lua
+          grep -q 'mod.hooks:wrap("input.step"' kanto_dive/src/UnderwaterIntercept2D.lua
+          grep -q 'mod.hooks:wrap("input.step"' kanto_dive/src/Salvage2D.lua
+          ! grep -q 'OverworldState.update%s*=' kanto_dive/src/UnderwaterWildlife2D.lua
+          ! grep -q 'OverworldState.update%s*=' kanto_dive/src/UnderwaterIntercept2D.lua

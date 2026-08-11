@@ -1,7 +1,7 @@
 {
   "id": "kanto_dive",
   "name": "Kanto Dive",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "api": 2,
   "entry": "main.lua",
   "profile": "overhaul",
@@ -10,10 +10,15 @@
   "priority": 200,
   "dependencies": [],
   "optional_dependencies": [
-    "DRAMATIC_SKY_RIDE"
+    "DRAMATIC_SKY_RIDE",
+    "overworld_wild_spawns",
+    "PokePCFollowers_VoxelMerge",
+    "pokepcfollowers",
+    "FOLLOWERS_EX",
+    "CRYSTAL_251"
   ],
   "conflicts": [],
-  "description": "Adds HM06 DIVE with Tiled-authored paired surface/underwater regions, 2D and Voxel dark-water markers, Emerald-style bidirectional mappings, seafloor maps, and Dramatic Sky Ride compatibility.",
+  "description": "Full-Kanto 2D HM08 DIVE overhaul: every real water area gets a generated underwater layer, continuous hydrology beneath bridges/docks/pontoons, seamless route connections, enlarged open-ocean spaces, biome-aware 2D scenery, submerged cave/harbor links and sparse salvage. HM08 is given unconditionally by a fixed researcher outside, just left of the Cinnabar Lab. With Wilds of Kanto, only visible Pokedex-scaled overworld Pokemon can trigger underwater wild battles through forgiving 2D interception. Includes HM06 WHIRLPOOL, HM07 WATERFALL, Crystal 251 and Dramatic Sky Ride compatibility.",
   "permissions": [
     "engine_internals"
   ],
