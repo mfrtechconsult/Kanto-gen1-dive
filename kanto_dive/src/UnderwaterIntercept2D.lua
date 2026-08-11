@@ -4,10 +4,50 @@ local UnderwaterIntercept2D = {}
 UnderwaterIntercept2D.__index = UnderwaterIntercept2D
 
 local CELL = 16
-local INTERCEPT_RADIUS = 2.5 * CELL
-local SIZE_RADIUS_BONUS = 9
+local PLAYER_INSET_X = 2
+local PLAYER_INSET_TOP = 3
+local PLAYER_INSET_BOTTOM = 1
+local SWIMMER_INSET = 2
 local PENDING_BATTLE_SECONDS = 4
 local POST_BATTLE_REST = 4.0
+
+local function overlap(a0, a1, b0, b1)
+  return a0 <= b1 and a1 >= b0
+end
+
+local function playerBounds(player)
+  local x = tonumber(player and player.px) or ((player and player.cellX or 0) * CELL)
+  local y = tonumber(player and player.py) or ((player and player.cellY or 0) * CELL)
+  return x + PLAYER_INSET_X,
+    y + PLAYER_INSET_TOP,
+    x + CELL - PLAYER_INSET_X,
+    y + CELL - PLAYER_INSET_BOTTOM
+end
+
+local function swimmerBounds(swimmer)
+  local scale = math.max(0.1, tonumber(swimmer and swimmer.visualScale) or 1)
+  local px = tonumber(swimmer and swimmer.px) or ((swimmer and swimmer.cellX or 0) * CELL)
+  local py = tonumber(swimmer and swimmer.py) or ((swimmer and swimmer.cellY or 0) * CELL)
+
+  -- UnderwaterWildlife2D scales each 16x16 Pokemon sprite around its bottom
+  -- centre (px + 8, py + 16). Mirror that exact presentation here so a battle
+  -- begins when the player's body actually overlaps the visible Pokemon, not
+  -- when the player merely enters a generous proximity radius.
+  local anchorX = px + CELL / 2
+  local anchorY = py + CELL
+  local halfWidth = math.max(2, CELL * scale / 2 - SWIMMER_INSET)
+  local height = math.max(4, CELL * scale - SWIMMER_INSET)
+  return anchorX - halfWidth,
+    anchorY - height,
+    anchorX + halfWidth,
+    anchorY - SWIMMER_INSET
+end
+
+local function touching(player, swimmer)
+  local pl, pt, pr, pb = playerBounds(player)
+  local sl, st, sr, sb = swimmerBounds(swimmer)
+  return overlap(pl, pr, sl, sr) and overlap(pt, pb, st, sb)
+end
 
 function UnderwaterIntercept2D.new(mod, service, wildlife)
   return setmetatable({
@@ -21,20 +61,16 @@ function UnderwaterIntercept2D.new(mod, service, wildlife)
 end
 
 function UnderwaterIntercept2D:nearest(player)
-  local px = (player.px or player.cellX * CELL) + 8
-  local py = (player.py or player.cellY * CELL) + 8
-  local best, bestScore
+  local px = (tonumber(player.px) or player.cellX * CELL) + 8
+  local py = (tonumber(player.py) or player.cellY * CELL) + 8
+  local best, bestDist2
   for _, swimmer in ipairs(self.wildlife.swimmers or {}) do
-    if not swimmer.dead and swimmer.species then
-      local scale = tonumber(swimmer.visualScale) or 1
-      local radius = INTERCEPT_RADIUS + math.max(0, scale - 1) * SIZE_RADIUS_BONUS
-      local dx, dy = (swimmer.px + 8) - px, (swimmer.py + 8) - py
+    if not swimmer.dead and swimmer.species and touching(player, swimmer) then
+      local dx = ((tonumber(swimmer.px) or swimmer.cellX * CELL) + 8) - px
+      local dy = ((tonumber(swimmer.py) or swimmer.cellY * CELL) + 8) - py
       local dist2 = dx * dx + dy * dy
-      if dist2 <= radius * radius then
-        local score = dist2 / (radius * radius)
-        if not bestScore or score < bestScore then
-          best, bestScore = swimmer, score
-        end
+      if not bestDist2 or dist2 < bestDist2 then
+        best, bestDist2 = swimmer, dist2
       end
     end
   end
@@ -75,7 +111,7 @@ function UnderwaterIntercept2D:tryIntercept(game)
     y = player.cellY,
   })
   if self.mod.log then
-    self.mod.log:info("visible underwater intercept: %s Lv%d", tostring(species), level)
+    self.mod.log:info("visible underwater contact intercept: %s Lv%d", tostring(species), level)
   end
   return true
 end
@@ -111,7 +147,7 @@ function UnderwaterIntercept2D:stats()
   return {
     intercepted = self.intercepted,
     cooldown = self.cooldown,
-    radiusCells = INTERCEPT_RADIUS / CELL,
+    contactOnly = true,
   }
 end
 
