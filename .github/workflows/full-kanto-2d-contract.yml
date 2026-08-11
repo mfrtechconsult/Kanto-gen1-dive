@@ -23,6 +23,8 @@ jobs:
           sudo apt-get install -y lua5.4
       - name: Parse all Lua sources
         run: find kanto_dive -name '*.lua' -print0 | xargs -0 -n1 luac5.4 -p
+      - name: Test unconditional exterior HM08 researcher
+        run: lua5.4 kanto_dive/tools/test_hm08_researcher.lua
       - name: Test Full-Kanto 2D atlas and scaled travel
         run: lua5.4 kanto_dive/tools/test_full_kanto_2d.lua
       - name: Test Wilds visible-only underwater encounters
