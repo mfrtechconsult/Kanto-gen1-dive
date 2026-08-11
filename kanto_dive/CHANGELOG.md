@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.6.1
+
+- Changed visible underwater Pokemon encounters to trigger only on direct player/Pokemon sprite contact.
+- Removed the previous 2.5-cell proximity interception radius and the additional large-species range bonus.
+- Contact now uses the actual displayed Pokemon footprint, including Pokédex-derived visual scaling.
+- Preserved visible species/level battles, Wilds-only encounter policy and post-battle cooldown behavior.
+- Added regression coverage for long-range non-contact, true contact and large scaled sprites.
+
 ## 1.6.0
 
 - Promoted the Full-Kanto 2D underwater overhaul to the stable release line.
