@@ -2,7 +2,7 @@
 
 Kanto Dive adds **HM08 DIVE** and a complete **2D underwater Kanto** to Gen1Recomp, together with Crystal-style **HM06 WHIRLPOOL** and **HM07 WATERFALL** field mechanics.
 
-The `1.6.0-alpha.1` development line brings Kanto Dive to functional parity with the Full-Kanto architecture developed for Dramatic Deep Dive while deliberately preserving Kanto Dive's simpler **flat, Emerald-style 2D identity**.
+The `1.6.0` release brings Kanto Dive to functional parity with the Full-Kanto architecture developed for Dramatic Deep Dive while deliberately preserving Kanto Dive's simpler **flat, Emerald-style 2D identity**.
 
 Kanto Dive does **not** use a voxel renderer and does **not** add free vertical swimming. Its maps, movement, Pokémon and exploration remain 2D.
 
@@ -43,7 +43,7 @@ The old four-map runtime (`Route 19`, `Route 20`, `Route 21`, and the prototype 
 
 The surface geography remains recognizable, but the underwater world is allowed to feel much larger than the compact Generation I overworld.
 
-Current requested scales are:
+Current scales are:
 
 - **open ocean:** up to `x3` width and height, giving roughly **9x the 2D swim area**;
 - **volcanic open water:** up to `x3`;
@@ -197,12 +197,9 @@ Because Kanto has no Glacier Badge or Rising Badge, the current field progressio
 
 ## Obtaining HM08 DIVE
 
-1. Defeat Blaine and obtain the Volcano Badge.
-2. Visit the Metronome Room in the Cinnabar Pokémon Lab.
-3. Talk to the scientist who normally gives TM35.
-4. He gives HM08 without replacing the original TM35 reward.
+A fixed researcher stands **outside on Cinnabar Island, immediately to the left of the Pokémon Lab**.
 
-The historical save flag is retained so older Kanto Dive saves keep their progression.
+Talk to him and he gives **HM08 DIVE immediately**. There is **no badge requirement, no Blaine requirement and no story/TM35 prerequisite**. If HM08 is already in the bag, he simply reminds the player how to use DIVE.
 
 ## Crystal 251 compatibility
 
@@ -244,7 +241,7 @@ The mod exposes compatibility helpers for:
 
 ## Validation
 
-The development branch includes dedicated headless contracts in addition to launcher packaging.
+Dedicated headless contracts run alongside launcher packaging.
 
 Automated checks cover:
 
@@ -262,11 +259,11 @@ Automated checks cover:
 - Wilds `encounter.species` forced-encounter suppression;
 - normal encounter behavior outside Kanto Dive.
 
-## Development status
+## Release status
 
-Current development preview: **Kanto Dive 1.6.0-alpha.1**.
+Current stable release: **Kanto Dive 1.6.0**.
 
-The overhaul lives on `dev/deep-dive-functional-backport` and its pull request remains a development draft. The published `main` branch remains the stable line until this Full-Kanto 2D version is explicitly approved after gameplay testing.
+The Full-Kanto 2D overhaul is published on `main`. GitHub releases include a launcher-ready ZIP with `manifest.json` and `main.lua` at the archive root.
 
 ## License
 
